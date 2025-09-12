@@ -1,5 +1,4 @@
--- Query to get average salary for all scientists
-
+-- average salary
 SELECT AVG(salary) AS average_salary 
 FROM salaries
 
@@ -20,4 +19,3 @@ SELECT *
 FROM salaries 
 ORDER BY salary 
 ASC LIMIT 1;
-

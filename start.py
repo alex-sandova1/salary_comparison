@@ -1,20 +1,67 @@
 import pandas as pd
 import sqlite3
 
+from utils import *
+
+#load csv data 
 df = pd.read_csv('datascience_salaries.csv')
 
+#create a new sqlite database (or connect to existing one)
 conn = sqlite3.connect('salaries.db')
 
+#write the dataframe to a sql table named 'salaries'
 df.to_sql('salaries', conn, if_exists='replace', index=False)
 
-#grab average salary for data scientist
-query = "SELECT AVG(salary) AS average_salary FROM salaries WHERE job_title = 'Data scientist';"
-result = pd.read_sql_query(query, conn)
-Ds_avg = result['average_salary'][0]
+#deleete duplicate rows 
+df = remove_duplicates(df)
 
-#grab average salary for
-print(f"Average salary for Data Scientist: {Ds_avg}")
+#get the query for average salary for all scientists
+query = get_query_by_label('queries.sql', 'average salary')
+if query:
+    result = pd.read_sql_query(query, conn)
+    # Round the result to two decimal places and print just the value
+    avg_salary = round(result.iloc[0, 0], 2)
+    print(f"Average salary: {avg_salary}")
+else:
+    print("Query not found.")
 
-#print(result)
+print("\n")
+
+#get the query for highest salary
+query_highest = get_query_by_label('queries.sql', 'highest salary')
+if query_highest:
+    result_highest = pd.read_sql_query(query_highest, conn)
+    print(result_highest.iloc[0])
+else:
+    print("Query not found.")
+
+print("\n")
+
+#get the query for lowest salary
+query_lowest = get_query_by_label('queries.sql', 'lowest salary')
+if query_lowest:
+    result_lowest = pd.read_sql_query(query_lowest, conn)
+    print(result_lowest.iloc[0])
+else:
+    print("Query not found.")
+
+print("\n")
+
+# Find average salary by job title
+query = "SELECT job_title, AVG(salary) AS average_salary FROM salaries GROUP BY job_title"
+result_by_title = pd.read_sql_query(query, conn)
+result_by_title['average_salary'] = result_by_title['average_salary'].round(2)
+print("Average salary by job title:")
+print(result_by_title)
+
+#find how many employees per job title
+df_count = pd.read_sql_query("SELECT job_title, COUNT(*) AS count FROM salaries GROUP BY job_title", conn)
+print("\nNumber of employees per job title:")
+print(df_count)
+
+#graph salary distribution
+#plot_salary_distribution(df)
+
+#plot_salary_distribution_by_title(df, 'Data scientist')
 
 conn.close()
