@@ -48,19 +48,35 @@ else:
 print("\n")
 
 # Find average salary by job title
-query = "SELECT job_title, AVG(salary) AS average_salary FROM salaries GROUP BY job_title"
-result_by_title = pd.read_sql_query(query, conn)
-result_by_title['average_salary'] = result_by_title['average_salary'].round(2)
-print("Average salary by job title:")
-print(result_by_title)
+query_by_title = get_query_by_label('queries.sql', 'average salary by job title')
+if query_by_title:
+    df_by_title = pd.read_sql_query(query_by_title, conn)
+    df_by_title['average_salary'] = df_by_title['average_salary'].round(2)    
+    print("Average salary by job title:")
+    print(df_by_title)
+else:
+    print("Query not found.")
 
 #find how many employees per job title
-df_count = pd.read_sql_query("SELECT job_title, COUNT(*) AS count FROM salaries GROUP BY job_title", conn)
-print("\nNumber of employees per job title:")
-print(df_count)
+employee_count = get_query_by_label('queries.sql', 'number of employees per job title')
+if employee_count:
+    result_employee_count = pd.read_sql_query(employee_count, conn)
+    print("\nNumber of employees per job title:")
+    print(result_employee_count)
+else:
+    print("Query not found.")
+
+median = get_query_by_label('queries.sql', 'median salary')
+if median:
+    result_median = pd.read_sql_query(median, conn)
+    print(result_median.iloc[0])
+else:
+    print("Query not found.")
 
 #graph salary distribution
 #plot_salary_distribution(df)
+
+
 
 #plot_salary_distribution_by_title(df, 'Data scientist')
 

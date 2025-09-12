@@ -1,4 +1,6 @@
-#Extract a specific query from the SQL file using a label (comment)
+#-----------------DATAFRAME FUNCTIONS-----------------
+
+#Extract a specific query from the SQL file using a label
 def get_query_by_label(filename, label):
     with open(filename, 'r') as f:
         content = f.read()
@@ -20,6 +22,9 @@ def get_query_by_label(filename, label):
 #delete double entries based on all columns
 def remove_duplicates(df):
     return df.drop_duplicates()
+
+
+#-----------------GRAPH FUNCTIONS-----------------
 
 #graph salary distribution
 def plot_salary_distribution(df):
