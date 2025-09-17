@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
+
 #-----------------DATAFRAME FUNCTIONS-----------------
 
 #Extract a specific query from the SQL file using a label
@@ -44,3 +47,16 @@ def plot_salary_distribution_by_title(df, title):
     plt.ylabel('Count')
     plt.title(f'Salary Distribution for {title}')
     plt.show()
+
+
+#----------------PDF FILE FUNCTIONS-----------------
+def create_pdf(avg_salary, ):
+
+    with PdfPages('salary_analysis.pdf') as pdf:
+        fig, ax = plt.subplots(figsize=(8, 6))
+        ax.axis('off')
+        ax.text(0.5, 0.7, 'Salary Analysis Report\n', fontsize=24, ha='center')
+        ax.text(0.05, 0.6, f"The following report will contain the main findings of the salary analysis.\n", fontsize=12, ha='left')
+        ax.text(0.05, 0.5, f"Average salary: ${avg_salary}", fontsize=12, ha='left')
+        pdf.savefig(fig)
+        plt.close()

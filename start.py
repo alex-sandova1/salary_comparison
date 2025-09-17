@@ -2,6 +2,7 @@ import pandas as pd
 import sqlite3
 
 from utils import *
+from matplotlib.backends.backend_pdf import PdfPages
 
 
 
@@ -75,8 +76,7 @@ if median:
 else:
     print("Query not found.")
 
-print("the highest paid is a", result_highest.iloc[0]['job_title'], "worker making", result_highest.iloc[0]['salary'], "dollars.\n")
-print("the lowest paid is a", result_lowest.iloc[0]['job_title'], "worker making", result_lowest.iloc[0]['salary'], "dollars.\n")
-print("difference between highest and lowest is", result_highest.iloc[0]['salary'] - result_lowest.iloc[0]['salary'], "dollars.\n")
-print("Data analyst average salary is", df_by_title.loc[df_by_title['job_title'] == 'Data analyst', 'average_salary'].values[0], "dollars.\n")
+#create a pdf file with the average salary
+create_pdf(avg_salary)
+
 conn.close()
