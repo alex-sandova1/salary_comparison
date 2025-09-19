@@ -33,9 +33,16 @@ location = location_df['location'].value_counts().reset_index()
 location.columns = ['location', 'job_count']
 location.to_csv('location.csv', index=False)
 
-#delete state_id column from cities.csv
-cities = pd.read_csv('Location info/cities.csv')
-cities = cities.drop(columns=['state_id'])
-cities.to_csv('Location info/cities.csv', index=False)
+#delete columns from csv files
+cities = pd.read_csv('cities.csv')
+cities = cities.drop(columns=['latitude', 'longitude'])
+cities.to_csv('cities.csv', index=False)
 
+states = pd.read_csv('states.csv')
+states = states.drop(columns=['latitude', 'longitude'])
+states.to_csv('states.csv', index=False)
+
+countries = pd.read_csv('countries.csv')
+countries = countries.drop(columns=['emoji', 'emojiU','longitude', 'latitude','timezones','native','tld','currency_symbol','currency','capital','phone_code'])
+countries.to_csv('countries.csv', index=False)
 conn.close()
