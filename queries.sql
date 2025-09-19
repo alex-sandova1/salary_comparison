@@ -49,3 +49,14 @@ FROM (
     LIMIT 2 - (SELECT COUNT(*) FROM salaries) % 2
     OFFSET (SELECT (COUNT(*) - 1) / 2 FROM salaries)
 ) AS median_subquery;
+
+--jobs based on location except remote
+SELECT location, COUNT(*) AS count
+FROM salaries
+WHERE location NOT LIKE '%Remote%' AND location NOT LIKE '%work%' 
+GROUP BY location;
+
+--remote jobs
+SELECT COUNT(*) AS remote_job_count
+FROM salaries
+WHERE location = 'Remote';

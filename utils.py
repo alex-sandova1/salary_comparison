@@ -50,13 +50,22 @@ def plot_salary_distribution_by_title(df, title):
 
 
 #----------------PDF FILE FUNCTIONS-----------------
-def create_pdf(avg_salary, ):
-
+def create_pdf(avg_salary, highest_salary, lowest_salary, median_salary):
     with PdfPages('salary_analysis.pdf') as pdf:
         fig, ax = plt.subplots(figsize=(8, 6))
         ax.axis('off')
-        ax.text(0.5, 0.7, 'Salary Analysis Report\n', fontsize=24, ha='center')
+        ax.text(0.5, 0.7, 'Salary Analysis Report', fontsize=24, ha='center')
         ax.text(0.05, 0.6, f"The following report will contain the main findings of the salary analysis.\n", fontsize=12, ha='left')
-        ax.text(0.05, 0.5, f"Average salary: ${avg_salary}", fontsize=12, ha='left')
+        ax.text(0.05, 0.55, '\nBasic Metrics:', fontsize=16, ha='center')
+        ax.text(0.01, 0.5, f"Average salary: ${avg_salary['all_jobs']}", fontsize=12,ha='left')
+        ax.text(0.01, 0.4, f"Highest salary: ${highest_salary['all_jobs']}", fontsize=12, ha='left')
+        ax.text(0.01, 0.3, f"Lowest salary: ${lowest_salary['all_jobs']}", fontsize=12, ha='left')
+        ax.text(0.01, 0.2, f"Median salary: ${median_salary['all_jobs']}", fontsize=12, ha='left')
+        ax.text(0.05, 0.05, 'Job analysis: \n', fontsize=16, ha='center')
+        ax.text(0.01, 0.0, 'DATA SCIENTIST:\n', fontsize=12, ha='left')
+        ax.text(0.01, -0.05, f"Average salary: ${avg_salary}", fontsize=10, ha='left')
+        ax.text(0.01,-0.1, f"Highest salary: ${highest_salary['data_scientist']}", fontsize=10, ha='left')
+        ax.text(0.01,-0.15, f"Lowest salary: ${lowest_salary['data_scientist']}", fontsize=10, ha='left')
         pdf.savefig(fig)
         plt.close()
+        
