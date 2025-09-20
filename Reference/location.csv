@@ -1,0 +1,283 @@
+location,job_count,country,continent
+Aarhus,1, Denmark, Europe
+Oakville,1, Canada, North America
+Palaiseau,1, France, Europe
+Overland Park,1, United States, North America
+Ottawa,1, Canada, North America
+Oslo,1, Norway, Europe
+Ontario,1, Canada, North America
+Omaha,1, United States, North America
+O'Fallon,1, United States, North America
+Palta Cyprus,1, Cyprus, Europe
+Nottingham,1, United Kingdom, Europe
+North Sydney,1, Australia, Australia
+North Reading,1, United States, North America
+North Macedonia,1, North Macedonia, Europe
+Norfolk,1, United Kingdom, Europe
+Newcastle upon Tyne,1, United Kingdom, Europe
+Palo Alto,1, United States, North America
+Papendrecht,1, Netherlands, Europe
+Renningen,1, Germany, Europe
+Portugal,1, Portugal, Europe
+Redwood City,1, United States, North America
+Raleigh,1, United States, North America
+Pyrmont,1, Australia, Australia
+Pune,1, India, Asia
+Princeton,1, United States, North America
+Poznań,1, Poland, Europe
+Porto,1, Portugal, Europe
+Paris,1, France, Europe
+Portland,1, United States, North America
+Poland,1, Poland, Europe
+Pittsburgh,1, United States, North America
+Philadelphia,1, United States, North America
+Petaling Jaya,1, Malaysia, Asia
+Petach Tikva,1, Israel, Asia
+Newbury,1, United Kingdom, Europe
+New York City; San Francisco,1, United States, North America
+New York City - Boston,1, United States, North America
+Medellín,1, Colombia, South America
+Milwaukee,1, United States, North America
+Milan,1, Italy, Europe
+Midrand,1, South Africa, Africa
+Mexico City,1, Mexico, North America
+Mexico,1, Mexico, North America
+Melbourne,1, Australia, Australia
+Mechelen,1, Belgium, Europe
+New York City,1, United States, North America
+Massy - France,1, France, Europe
+Marousi,1, Greece, Europe
+Markham,1, Canada, North America
+Manila,1, Philippines, Asia
+Mandaluyong,1, Philippines, Asia
+Malvern,1, United Kingdom, Europe
+Minato City,1, Japan, Asia
+Minneapolis,1, United States, North America
+Modena,1, Italy, Europe
+Monterrey,1, Mexico, North America
+Montreal,1, Canada, North America
+Montréal,1, Canada, North America
+Morrisville,1, United States, North America
+Mount Laurel Township,1, United States, North America
+Mountain View,1, United States, North America
+Mumbai,1, India, Asia
+Munich,1, Germany, Europe
+Muntinlupa,1, Philippines, Asia
+Málaga,1, Spain, Europe
+NAMER,1, North America
+Nairobi,1, Kenya, Africa
+Nanterre,1, France, Europe
+New York,1, United States, North America
+Reigate,1, United Kingdom, Europe
+Reno,1, United States, North America
+Aberdeen,1, United Kingdom, Europe
+Toulouse,1, France, Europe
+Utrecht,1, Netherlands, Europe
+United States,1, United States, North America
+USA,1, United States, North America
+US east coast,1, United States, North America
+UK,1, United Kingdom, Europe
+Tunis,1, Tunisia, Africa
+Toronto,1, Canada, North America
+Vancouver,1, Canada, North America
+Tel-Aviv,1, Israel, Asia
+Tel Aviv-Yafo,1, Israel, Asia
+Tel Aviv,1, Israel, Asia
+Tampere,1, Finland, Europe
+Tampa,1, United States, North America
+Taipei,1, Taiwan, Asia
+Valencia,1, Spain, Europe
+Vero Beach,1, United States, North America
+Research Triangle Park,1, United States, North America
+Westminster,1, United Kingdom, Europe
+České Budějovice,1, Czech Republic, Europe
+tel aviv,1, Israel, Asia
+Zurich,1, Switzerland, Europe
+Wrocław,1, Poland, Europe
+Wilmington,1, United States, North America
+Wien,1, Austria, Europe
+West Point,1, United States, North America
+Vienna,1, Austria, Europe
+West Palm Beach,1, United States, North America
+West Jakarta,1, Indonesia, Asia
+Washington,1, United States, North America
+Warszawa,1, Poland, Europe
+Warsaw,1, Poland, Europe
+Walnut Creek,1, United States, North America
+São Paulo,1, Brazil, South America
+Sydney,1, Australia, Australia
+Sunnyvale,1, United States, North America
+Salt Lake City,1, United States, North America
+Santa Clara,1, United States, North America
+Sandton,1, South Africa, Africa
+San Mateo,1, United States, North America
+San Jose,1, United States, North America
+San Francisco,1, United States, North America
+San Diego,1, United States, North America
+Saint-Sauveur,1, Canada, North America
+Suitland-Silver Hill,1, United States, North America
+Saint-Herblain,1, France, Europe
+Saint-Denis,1, France, Europe
+Roppongi,1, Japan, Asia
+Riga,1, Latvia, Europe
+Richmond,1, United States, North America
+Richardson,1, United States, North America
+Santiago,1, Chile, South America
+Santiago de Querétaro,1, Mexico, North America
+Sarasota,1, United States, North America
+Seattle,1, United States, North America
+Sector 62,1, India, Asia
+Seoul,1, South Korea, Asia
+Singapore,1, Singapore, Asia
+Sofia,1, Bulgaria, Europe
+Solna,1, Sweden, Europe
+Somerville,1, United States, North America
+South Jakarta,1, Indonesia, Asia
+Southfield,1, United States, North America
+Stamford,1, United States, North America
+Stanford,1, United States, North America
+Stevenage,1, United Kingdom, Europe
+Stockholm,1, Sweden, Europe
+Stuttgart,1, Germany, Europe
+Malmö,1, Sweden, Europe
+Malaysia - Kuala Lumpur,1, Malaysia, Asia
+Makati,1, Philippines, Asia
+Budapest,1, Hungary, Europe
+Calabasas,1, United States, North America
+Cairo,1, Egypt, Africa
+Bühl,1, Germany, Europe
+Burnaby,1, Canada, North America
+Bukit Jalil,1, Malaysia, Asia
+Buenos Aires,1, Argentina, South America
+Bucharest,1, Romania, Europe
+Cambridge,1, United Kingdom, Europe
+Brussels,1, Belgium, Europe
+Brooklyn,1, United States, North America
+Brazil,1, Brazil, South America
+Brampton,1, Canada, North America
+Bracknell,1, United Kingdom, Europe
+Bourdeaux,1, France, Europe
+California,1, United States, North America
+Campinas,1, Brazil, South America
+Madrid,1, Spain, Europe
+Chelmsford,1, United Kingdom, Europe
+Cluj,1, Romania, Europe
+Ciudad de México,1, Mexico, North America
+Cincinnati,1, United States, North America
+Chicago,1, United States, North America
+Chiasso,1, Switzerland, Europe
+Chennai,1, India, Asia
+Charlotte,1, United States, North America
+Canada,1, Canada, North America
+Charenton-Le-Pont,1, France, Europe
+Chantilly,1, France, Europe
+Casa Grande,1, United States, North America
+Cartagena,1, Colombia, South America
+Carquefou,1, France, Europe
+Cape Town,1, South Africa, Africa
+Boulogne-Billancourt,1, France, Europe
+Boulder,1, United States, North America
+Boston,1, United States, North America
+Asia,1, Asia
+Aventura,1, United States, North America
+Australia,1, Australia, Australia
+Austin,1, United States, North America
+Atlanta,1, United States, North America
+Athina,1, Greece, Europe
+Athens,1, Greece, Europe
+Arlington,1, United States, North America
+Bordeaux,1, France, Europe
+Antwerp,1, Belgium, Europe
+Ann Arbor,1, United States, North America
+Angeles,1, United States, North America
+Amsterdam,1, Netherlands, Europe
+Ahmedabad,1, India, Asia
+Abu Dhabi,1, United Arab Emirates, Asia
+Baar,1, Switzerland, Europe
+Ballerup,1, Denmark, Europe
+Bang Kapi District,1, Thailand, Asia
+BangPa-in,1, Thailand, Asia
+Bangkok,1, Thailand, Asia
+Barcelona,1, Spain, Europe
+Basel,1, Switzerland, Europe
+Beaverton,1, United States, North America
+Belfast,1, United Kingdom, Europe
+Belgrade,1, Serbia, Europe
+Belo Horizonte,1, Brazil, South America
+Bengaluru,1, India, Asia
+Berchem,1, Belgium, Europe
+Berkeley,1, United States, North America
+Berlin,1, Germany, Europe
+Bogota,1, Colombia, South America
+Bogotá,1, Colombia, South America
+Colorado Springs,1, United States, North America
+Copenhagen,1, Denmark, Europe
+Cork,1, Ireland, Europe
+Kampala,1, Uganda, Africa
+Kyiv,1, Ukraine, Europe
+Kusterdingen,1, Germany, Europe
+Kraków,1, Poland, Europe
+Kirkland,1, United States, North America
+Kingston,1, Jamaica, North America
+Katowice,1, Poland, Europe
+Jealott's Hill,1, United Kingdom, Europe
+Houston,1, United States, North America
+Jakarta,1, Indonesia, Asia
+Irving,1, United States, North America
+Indianapolis,1, United States, North America
+India - Bengaluru,1, India, Asia
+India,1, India, Asia
+Iași,1, Romania, Europe
+København,1, Denmark, Europe
+La Libertad,1, Peru, South America
+Las Vegas,1, United States, North America
+Lausanne,1, Switzerland, Europe
+Lexington,1, United States, North America
+Lille,1, France, Europe
+Lisboa,1, Portugal, Europe
+Lisbon,1, Portugal, Europe
+Lithuania | UK,1, United Kingdom, Europe
+Liverpool,1, United Kingdom, Europe
+London,1, United Kingdom, Europe
+Longueuil,1, Canada, North America
+Los Angeles,1, United States, North America
+Los Gatos,1, United States, North America
+Luxembourg,1, Luxembourg, Europe
+Lyon,1, France, Europe
+Lüneburg,1, Germany, Europe
+Hyderabad,1, India, Asia
+Hong Kong,1, Hong Kong, Asia
+Dallas,1, United States, North America
+East Windsor,1, United States, North America
+Europe,1, Europe, Europe
+Enkhuizen,1, Netherlands, Europe
+Englewood Cliffs,1, United States, North America
+Englewood,1, United States, North America
+England,1, United Kingdom, Europe
+Emeryville,1, United States, North America
+Düsseldorf,1, Germany, Europe
+Homestead,1, United States, North America
+Dublin,1, Ireland, Europe
+Dubai,1, United Arab Emirates, Asia
+Downers Grove,1, United States, North America
+Denver,1, United States, North America
+Delhi,1, India, Asia
+Dayton,1, United States, North America
+Flexible,1, United States, North America
+Fort Belvoir,1, United States, North America
+Fort Bragg,1, United States, North America
+Fremont,1, United States, North America
+Genève,1, Switzerland, Europe
+Glasgow,1, United Kingdom, Europe
+Glattbrugg,1, Switzerland, Europe
+Gothenburg,1, Sweden, Europe
+Granada,1, Spain, Europe
+Greenville,1, United States, North America
+Hamburg,1, Germany, Europe
+Hanoi,1, Vietnam, Asia
+Helsinki,1, Finland, Europe
+Heredia,1, Costa Rica, North America
+Herndon,1, United States, North America
+High Wycombe,1, United Kingdom, Europe
+Ho Chi Minh City,1, Vietnam, Asia
+İstanbul,1, Turkey, Asia

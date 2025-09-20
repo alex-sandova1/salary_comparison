@@ -60,3 +60,9 @@ GROUP BY location;
 SELECT COUNT(*) AS remote_job_count
 FROM salaries
 WHERE location = 'Remote';
+
+--jobs based on country
+SELECT country, COUNT(*) AS count
+FROM salaries
+WHERE country IS NOT NULL
+GROUP BY country;
