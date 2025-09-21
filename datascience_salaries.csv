@@ -1,4 +1,4 @@
-,job_title,job_type,experience_level,location,salary_currency,salary,country, continent
+,job_title,job_type,experience_level,location,salary_currency,salary,country,continent
 0,Data scientist,Full Time,Senior,New York City,USD,149000, United States, North America
 2,Data scientist,Full Time,Senior,Boston,USD,120000, United States, North America
 3,Data scientist,Full Time,Senior,London,USD,68000, United Kingdom, Europe
@@ -268,7 +268,7 @@
 332,Data scientist,Full Time,Senior,Indianapolis,USD,68000, United States, North America
 333,Data scientist,Full Time,Senior,Ottawa,USD,68000, Canada, North America
 334,Data scientist,Full Time,Senior,Palo Alto,USD,56000, United States, North America
-337,Data scientist,Full Time,Senior,Flexible,USD,68000, Flexible, Asia
+337,Data scientist,Full Time,Senior,Flexible,USD,68000,N/A,N/A
 338,Data scientist,Full Time,Senior,Santiago de Querétaro,USD,68000, Mexico, North America
 339,Data scientist,Full Time,Mid,London,USD,40000, United Kingdom, Europe
 340,Data scientist,Full Time,Entry,Remote,USD,36000, Remote, Asia

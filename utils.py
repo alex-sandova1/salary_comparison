@@ -26,8 +26,14 @@ def get_query_by_label(filename, label):
 def remove_duplicates(df):
     return df.drop_duplicates()
 
+#update db with new dataframe
+def update_database(df, conn, table_name):
+    df.to_sql(table_name, conn, if_exists='replace', index=False)
+    conn.commit()
 
-#-----------------GRAPH FUNCTIONS-----------------
+
+
+#-----------------FILE FUNCTIONS-----------------
 
 #graph salary distribution
 def plot_salary_distribution(df):
@@ -48,24 +54,19 @@ def plot_salary_distribution_by_title(df, title):
     plt.title(f'Salary Distribution for {title}')
     plt.show()
 
-
-#----------------PDF FILE FUNCTIONS-----------------
-def create_pdf(avg_salary, highest_salary, lowest_salary, median_salary):
-    with PdfPages('salary_analysis.pdf') as pdf:
-        fig, ax = plt.subplots(figsize=(8, 6))
-        ax.axis('off')
-        ax.text(0.5, 0.7, 'Salary Analysis Report', fontsize=24, ha='center')
-        ax.text(0.05, 0.6, f"The following report will contain the main findings of the salary analysis.\n", fontsize=12, ha='left')
-        ax.text(0.05, 0.55, '\nBasic Metrics:', fontsize=16, ha='center')
-        ax.text(0.01, 0.5, f"Average salary: ${avg_salary['all_jobs']}", fontsize=12,ha='left')
-        ax.text(0.01, 0.4, f"Highest salary: ${highest_salary['all_jobs']}", fontsize=12, ha='left')
-        ax.text(0.01, 0.3, f"Lowest salary: ${lowest_salary['all_jobs']}", fontsize=12, ha='left')
-        ax.text(0.01, 0.2, f"Median salary: ${median_salary['all_jobs']}", fontsize=12, ha='left')
-        ax.text(0.05, 0.05, 'Job analysis: \n', fontsize=16, ha='center')
-        ax.text(0.01, 0.0, 'DATA SCIENTIST:\n', fontsize=12, ha='left')
-        ax.text(0.01, -0.05, f"Average salary: ${avg_salary}", fontsize=10, ha='left')
-        ax.text(0.01,-0.1, f"Highest salary: ${highest_salary['data_scientist']}", fontsize=10, ha='left')
-        ax.text(0.01,-0.15, f"Lowest salary: ${lowest_salary['data_scientist']}", fontsize=10, ha='left')
-        pdf.savefig(fig)
-        plt.close()
-        
+#create new page when info exceeds one page
+def add_page(pdf, lines, y_start=0.9, y_step=0.05,min_y=0.1):
+    plt.figure(figsize=(8, 11))
+    plt.axis('off')
+    y = y_start
+    for line in lines:
+        plt.text(0.1, y, line, fontsize=10, va='top')
+        y -= y_step
+        if y < 0.1:  # If we reach the bottom of the page, save and start a new one
+            pdf.savefig()
+            plt.close()
+            plt.figure(figsize=(8, 11))
+            plt.axis('off')
+            y = y_start
+    pdf.savefig()
+    plt.close()
