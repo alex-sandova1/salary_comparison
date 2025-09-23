@@ -1,6 +1,7 @@
 import pandas as pd
 import sqlite3
 import math
+import matplotlib.pyplot as plt
 
 from utils import *
 from matplotlib.backends.backend_pdf import PdfPages
@@ -43,32 +44,27 @@ query = get_query_by_label('queries.sql', 'jobs based on continent')
 continent_df = pd.read_sql_query(query, conn)
 #print(continent_df.head())
 
-#work on pdf report
- 
-#add number of jobs per country and continent to pdf report
-with PdfPages('salary_report.pdf') as pdf:
-    mid = math.floor(len(country_df) / 2)
-    first_half = country_df.iloc[:mid, :]
-    second_half = country_df.iloc[mid:, :]
+#print(continent_df.columns)
 
-    # Create a figure for the first half
-    plt.figure(figsize=(8, 6))
-    plt.axis('off')
-    plt.title('Job Count by Country (First Half)', fontsize=16)
-    table = plt.table(cellText=first_half.values, colLabels=first_half.columns, cellLoc='left', loc='center left', colWidths=[0.3, 0.2])
-    table.auto_set_font_size(True)
-    table.set_fontsize(8)
-    table.scale(0.8, 0.8)
-    pdf.savefig()
-    plt.close()
+query = get_query_by_label('queries.sql', 'experience level distribution  grouped by country then experience level')
+experience_df = pd.read_sql_query(query, conn)
+#print(experience_df)
 
-    # Create a figure for the second half
-    plt.figure(figsize=(8, 6))
-    plt.axis('off')
-    plt.title('Job Count by Country (Second Half)', fontsize=16)
-    table = plt.table(cellText=second_half.values, colLabels=second_half.columns, cellLoc='left', loc='center left', colWidths=[0.3, 0.2])
-    table.auto_set_font_size(True)
-    table.set_fontsize(8)
-    table.scale(0.8, 0.8)
-    pdf.savefig()
-    plt.close()
+query = get_query_by_label('queries.sql', 'average pay by job based on experience level')
+average_pay_df = pd.read_sql_query(query, conn)
+#print(average_pay_df)#data is broken down by job title and experience level
+#safe for pdf report
+
+#calculate difference in pay between experience levels for each job title
+entry_diff = average_pay_df.pivot(index='job_title', columns='experience_level', values='average_salary')
+entry_diff['Mid_vs_Entry'] = entry_diff['Mid'] - entry_diff['Entry']
+print(entry_diff[['Mid_vs_Entry']])
+mid_diff = average_pay_df.pivot(index='job_title', columns='experience_level', values='average_salary')
+mid_diff['Senior_vs_Mid'] = mid_diff['Senior'] - mid_diff['Mid']
+print(mid_diff[['Senior_vs_Mid']])
+
+
+query = get_query_by_label('queries.sql', 'count of job salary based on experience level and job title')
+job_salary_count_df = pd.read_sql_query(query, conn)
+#print(job_salary_count_df)#counts the number of jobs based on experience level
+#safe for pdf report

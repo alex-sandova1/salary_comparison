@@ -72,3 +72,18 @@ SELECT continent, COUNT(*) AS count
 FROM salaries
 WHERE continent IS NOT NULL AND continent != 'N/A'
 GROUP BY continent;
+
+--experience level distribution  grouped by country then experience level
+SELECT country, experience_level, COUNT(*) AS count
+FROM salaries
+GROUP BY country, experience_level;
+
+--average pay by job based on experience level
+SELECT job_title, experience_level, AVG(salary) AS average_salary
+FROM salaries
+GROUP BY job_title, experience_level;
+
+--count of job salary based on experience level and job title
+SELECT job_title, experience_level, COUNT(*) AS count
+FROM salaries
+GROUP BY job_title, experience_level;

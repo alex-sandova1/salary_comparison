@@ -22,6 +22,7 @@ def get_query_by_label(filename, label):
             return sql
     return None
 
+
 #delete double entries based on all columns
 def remove_duplicates(df):
     return df.drop_duplicates()
@@ -54,19 +55,3 @@ def plot_salary_distribution_by_title(df, title):
     plt.title(f'Salary Distribution for {title}')
     plt.show()
 
-#create new page when info exceeds one page
-def add_page(pdf, lines, y_start=0.9, y_step=0.05,min_y=0.1):
-    plt.figure(figsize=(8, 11))
-    plt.axis('off')
-    y = y_start
-    for line in lines:
-        plt.text(0.1, y, line, fontsize=10, va='top')
-        y -= y_step
-        if y < 0.1:  # If we reach the bottom of the page, save and start a new one
-            pdf.savefig()
-            plt.close()
-            plt.figure(figsize=(8, 11))
-            plt.axis('off')
-            y = y_start
-    pdf.savefig()
-    plt.close()

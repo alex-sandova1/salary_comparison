@@ -468,7 +468,7 @@
 613,Data analyst,Full Time,Senior,Stuttgart,USD,63000, Germany, Europe
 615,Data analyst,Full Time,Mid,Denver,USD,51000, United States, North America
 616,Data analyst,Full Time,Senior,London,USD,63000, United Kingdom, Europe
-619,Data analyst,Full Time,Senior,Sydney,USD,63000, Australia, Oceania
+619,Data analyst,Full Time,Senior,Sydney,USD,63000, Australia, Australia
 620,Data analyst,Full Time,Entry,Barcelona,USD,30000, Spain, Europe
 622,Data analyst,Full Time,Entry,Katowice,USD,30000, Poland, Europe
 625,Data analyst,Full Time,Senior,Montreal,USD,63000, Canada, North America
@@ -500,7 +500,7 @@
 667,Data analyst,Full Time,Senior,Washington,USD,81000, United States, North America
 668,Data analyst,Full Time,Mid,Seattle,USD,51000, United States, North America
 669,Data analyst,Full Time,Senior,Hamburg,USD,63000, Germany, Europe
-670,Data analyst,Full Time,Entry,Pyrmont,USD,30000, Australia, Oceania
+670,Data analyst,Full Time,Entry,Pyrmont,USD,30000, Australia, Australia
 671,Data analyst,Full Time,Mid,Philadelphia,USD,51000, United States, North America
 676,Data analyst,Full Time,Senior,Helsinki,USD,63000, Finland, Europe
 677,Data analyst,Full Time,Senior,Richardson,USD,63000, United States, North America
@@ -674,7 +674,7 @@
 952,Data analyst,Full Time,Senior,Jakarta,USD,63000, Indonesia, Asia
 953,Data analyst,Full Time,Senior,São Paulo,USD,63000, Brazil, South America
 954,Data analyst,Full Time,Entry,London,USD,30000, United Kingdom, Europe
-955,Data analyst,Full Time,Entry,Remote job,USD,30000, Remote, Global
+955,Data analyst,Full Time,Entry,Remote job,USD,30000, Remote, North America
 956,Data analyst,Full Time,Senior,New York City,USD,110000, United States, North America
 957,Data analyst,Full Time,Entry,Modena,USD,30000, Italy, Europe
 958,Data analyst,Full Time,Mid,Aventura,USD,51000, United States, North America
@@ -713,7 +713,7 @@
 1015,Data analyst,Full Time,Entry,Madrid,USD,30000, Spain, Europe
 1016,Data analyst,Full Time,Senior,New York City,USD,63000, United States, North America
 1018,Data analyst,Full Time,Mid,Paris,USD,51000, France, Europe
-1019,Data analyst,Full Time,Mid,Sydney,USD,51000, Australia, Oceania
+1019,Data analyst,Full Time,Mid,Sydney,USD,51000, Australia, Australia
 1020,Data analyst,Full Time,Senior,Bangkok,USD,63000, Thailand, Asia
 1021,Data analyst,Full Time,Mid,Cape Town,USD,51000, South Africa, Africa
 1024,Data analyst,Full Time,Senior,Ontario,USD,63000, Canada, North America
@@ -723,7 +723,7 @@
 1032,Data analyst,Full Time,Entry,Kraków,USD,30000, Poland, Europe
 1033,Data analyst,Full Time,Senior,Irving,USD,63000, United States, North America
 1034,Data analyst,Full Time,Senior,Malaysia - Kuala Lumpur,USD,63000, Malaysia, Asia
-1035,Data analyst,Full Time,Senior,Sydney,USD,63000, Australia, Oceania
+1035,Data analyst,Full Time,Senior,Sydney,USD,63000, Australia, Australia
 1036,Data analyst,Full Time,Senior,Montreal,USD,63000, Canada, North America
 1038,Data analyst,Full Time,Senior,United States,USD,63000, United States, North America
 1039,Data analyst,Full Time,Mid,Boston,USD,124000, United States, North America
@@ -846,7 +846,7 @@
 1462,Big data,Full Time,Senior,Makati,USD,30000, Philippines, Asia
 1463,Big data,Full Time,Senior,Cartagena,USD,76000, Colombia, South America
 1464,Big data,Full Time,Mid,Granada,USD,38000, Spain, Europe
-1465,Big data,Full Time,Senior,Sydney,USD,30000, Australia, Oceania
+1465,Big data,Full Time,Senior,Sydney,USD,30000, Australia, Australia
 1466,Big data,Full Time,Senior,Remote,USD,76000, United States, North America
 1468,Big data,Full Time,Mid,Las Vegas,USD,78000, United States, North America
 1469,Big data,Full Time,Senior,Singapore,USD,46000, Singapore, Asia
@@ -903,7 +903,7 @@
 1543,Machine learning,Full Time,Senior,Seattle,USD,45000, United States, North America
 1544,Machine learning,Internship,Entry,Mountain View,USD,56000, United States, North America
 1545,Machine learning,Full Time,Senior,San Francisco,USD,165000, United States, North America
-1549,Machine learning,Full Time,Mid,Sydney,USD,62000, Australia, Oceania
+1549,Machine learning,Full Time,Mid,Sydney,USD,62000, Australia, Australia
 1550,Machine learning,Internship,Senior,New York City,USD,45000, United States, North America
 1551,Machine learning,Full Time,Mid,Athens,USD,43000, Greece, Europe
 1552,Machine learning,Full Time,Senior,Cambridge,USD,68000, United Kingdom, Europe
@@ -923,9 +923,9 @@
 1589,Machine learning,Full Time,Senior,Remote - United States,USD,177000, United States, North America
 1590,Machine learning,Full Time,Senior,Bengaluru,USD,63000, India, Asia
 1592,Machine learning,Full Time,Senior,Lisbon,USD,45000, Portugal, Europe
-1596,Machine learning,Full Time,Senior,Australia,USD,45000, Australia, Oceania
+1596,Machine learning,Full Time,Senior,Australia,USD,45000, Australia, Australia
 1597,Machine learning,Full Time,Senior,San Francisco,USD,167000, United States, North America
-1598,Machine learning,Full Time,Senior,Sydney,USD,45000, Australia, Oceania
+1598,Machine learning,Full Time,Senior,Sydney,USD,45000, Australia, Australia
 1599,Machine learning,Full Time,Mid,Brampton,USD,43000, Canada, North America
 1604,Machine learning,Full Time,Mid,Dallas,USD,40000, United States, North America
 1607,Machine learning,Full Time,Mid,Santiago de Querétaro,USD,45000, Mexico, North America
@@ -958,7 +958,7 @@
 1667,Machine learning,Full Time,Entry,Calabasas,USD,120000, United States, North America
 1669,Machine learning,Full Time,Entry,Carquefou,USD,30000, France, Europe
 1672,Machine learning,Full Time,Mid,United States - Remote,USD,100000, United States, North America
-1673,Machine learning,Full Time,Senior,Melbourne,USD,45000, Australia, Oceania
+1673,Machine learning,Full Time,Senior,Melbourne,USD,45000, Australia, Australia
 1674,Machine learning,Full Time,Mid,New York City,USD,150000, United States, North America
 1676,Machine learning,Internship,Mid,Brooklyn,USD,63000, United States, North America
 1677,Machine learning,Full Time,Senior,Seattle,USD,45000, United States, North America
@@ -1152,7 +1152,7 @@
 2180,Machine learning,Full Time,Senior,Remote,USD,45000, United States, North America
 2181,Machine learning,Full Time,Mid,Ann Arbor,USD,90000, United States, North America
 2188,ML Ops,Full Time,Mid,US east coast,USD,124000, United States, North America
-2189,ML Ops,Full Time,Entry,North Sydney,USD,35000, Australia, Oceania
+2189,ML Ops,Full Time,Entry,North Sydney,USD,35000, Australia, Australia
 2190,ML Ops,Full Time,Senior,Berlin,USD,62000, Germany, Europe
 2191,ML Ops,Full Time,Mid,Malvern,USD,56000, United Kingdom, Europe
 2201,ML Ops,Full Time,Mid,London,USD,43000, United Kingdom, Europe
