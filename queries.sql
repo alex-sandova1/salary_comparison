@@ -19,21 +19,12 @@ FROM salaries
 ORDER BY salary 
 DESC LIMIT 1;
 
---highest salary by job title
-SELECT job_title, MAX(salary) AS highest_salary
-FROM salaries
-GROUP BY job_title;
-
 --lowest salary
 SELECT * 
 FROM salaries 
 ORDER BY salary 
 ASC LIMIT 1;
 
---lowest salary by job title
-SELECT job_title, MIN(salary) AS lowest_salary
-FROM salaries
-GROUP BY job_title;
 
 --number of employees per job title
 SELECT job_title, COUNT(*) AS count
@@ -85,5 +76,30 @@ GROUP BY job_title, experience_level;
 
 --count of job salary based on experience level and job title
 SELECT job_title, experience_level, COUNT(*) AS count
+FROM salaries
+GROUP BY job_title, experience_level;
+
+--max salary by job title
+SELECT job_title, MAX(salary) AS max_salary
+FROM salaries
+GROUP BY job_title;
+
+--lowest salary by job title
+SELECT job_title, MIN(salary) AS min_salary
+FROM salaries
+GROUP BY job_title;
+
+--max salary by job title and experience level
+SELECT job_title, experience_level, MAX(salary) AS max_salary
+FROM salaries
+GROUP BY job_title, experience_level;
+
+--min salary by job title and experience level
+SELECT job_title, experience_level, MIN(salary) AS min_salary
+FROM salaries
+GROUP BY job_title, experience_level;
+
+--average salary by job title and experience level
+SELECT job_title, experience_level, AVG(salary) AS average_salary
 FROM salaries
 GROUP BY job_title, experience_level;
