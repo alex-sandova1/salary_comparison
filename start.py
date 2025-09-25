@@ -16,7 +16,7 @@ conn = sqlite3.connect('salaries.db')
 #delete duplicate rows 
 df = remove_duplicates(df)
 
-#delete columns from csv files -- used to clean up reference dataframes
+#delete columns from csv files -- used to clean up reference dataframes--
 '''cities = pd.read_csv('cities.csv')
 cities = cities.drop(columns=['latitude', 'longitude'])
 cities.to_csv('cities.csv', index=False)
@@ -32,7 +32,9 @@ conn.close()
 '''
 
 #update db with new dataframe
-update_database(df, conn, 'salaries') #call when needed
+#update_database(df, conn, 'salaries') #call when needed
+
+#-----------------------query data-----------------------
 
 #print jobs based on country
 query = get_query_by_label('queries.sql', 'jobs based on country')
@@ -56,16 +58,27 @@ average_pay_df = pd.read_sql_query(query, conn)
 #safe for pdf report
 
 #calculate difference in pay between experience levels for each job title
+
+# Calculate differences and growth BEFORE formatting as string
 entry_diff = average_pay_df.pivot(index='job_title', columns='experience_level', values='average_salary')
 entry_diff['Mid_vs_Entry'] = entry_diff['Mid'] - entry_diff['Entry']
+entry_diff['Growth_%'] = (entry_diff['Mid_vs_Entry'] / entry_diff['Entry'] * 100)
+# Format for display
 if 'Mid_vs_Entry' in entry_diff.columns:
-    entry_diff['Mid_vs_Entry'] = entry_diff['Mid_vs_Entry'].map(lambda x: f"{x:.2f}")
-#print(entry_diff[['Mid_vs_Entry']])
+	entry_diff['Mid_vs_Entry'] = entry_diff['Mid_vs_Entry'].map(lambda x: f"{x:.2f}")
+if 'Growth_%' in entry_diff.columns:
+	entry_diff['Growth_%'] = entry_diff['Growth_%'].map(lambda x: f"{x:.2f}%")
+
 mid_diff = average_pay_df.pivot(index='job_title', columns='experience_level', values='average_salary')
 mid_diff['Senior_vs_Mid'] = mid_diff['Senior'] - mid_diff['Mid']
+mid_diff['Growth_%'] = (mid_diff['Senior_vs_Mid'] / mid_diff['Mid'] * 100)
 if 'Senior_vs_Mid' in mid_diff.columns:
-    mid_diff['Senior_vs_Mid'] = mid_diff['Senior_vs_Mid'].map(lambda x: f"{x:.2f}")
-#print(mid_diff[['Senior_vs_Mid']])
+	mid_diff['Senior_vs_Mid'] = mid_diff['Senior_vs_Mid'].map(lambda x: f"{x:.2f}")
+if 'Growth_%' in mid_diff.columns:
+	mid_diff['Growth_%'] = mid_diff['Growth_%'].map(lambda x: f"{x:.2f}%")
+print(mid_diff)
+
+
 
 
 query = get_query_by_label('queries.sql', 'count of job salary based on experience level and job title')
@@ -74,13 +87,14 @@ job_salary_count_df = pd.read_sql_query(query, conn)
 #safe for pdf report
 
 
-# Print max salary by job title and experience level
+# max salary by job title and experience level
 query = get_query_by_label('queries.sql', 'max salary by job title and experience level')
 max_salary_exp_df = pd.read_sql_query(query, conn)
 if 'maximum_salary' in max_salary_exp_df.columns:
     max_salary_exp_df['maximum_salary'] = max_salary_exp_df['maximum_salary'].map(lambda x: f"{x:.2f}")
 #print(max_salary_exp_df) #safe for pdf report
 
+#min salary by job title and experience level
 query = get_query_by_label('queries.sql', 'min salary by job title')
 min_salary_df = pd.read_sql_query(query, conn)
 if 'minimum_salary' in min_salary_df.columns:
@@ -96,38 +110,119 @@ if 'average_salary' in avg_salary_exp_df.columns:
 	avg_salary_exp_df['average_salary'] = avg_salary_exp_df['average_salary'].map(lambda x: f"{x:.2f}")
 
 
+#------------------------generate pdf report-----------------------
+
 with PdfPages('salary_report.pdf') as pdf:
 	# Add a page with custom text
 	plt.figure(figsize=(8.5, 11)) #page size
 	plt.axis('off') #hide axes
-	plt.text(0.5, 0.5, 'Salary Report\nGenerated using Data Science Salaries Dataset', horizontalalignment='center', verticalalignment='center', fontsize=24, color='black', wrap=True)
+	plt.text(0.5, 0.5, 
+		  'Salary Report\nGenerated using Data Science Salaries Dataset', 
+		  horizontalalignment='center', 
+		  verticalalignment='center', 
+		  fontsize=24, 
+		  color='black', 
+		  wrap=True)
 	pdf.savefig()
 	plt.close()
 
 	#display max and min salary by job title
 	plt.figure(figsize=(8.5, 11)) #page size
 	plt.axis('off') #hide axes
-	plt.text(0.5, 1.03, 'Max Salary by Job Title', horizontalalignment='center', verticalalignment='top', fontsize=16, color='black', wrap=True)
-	plt.table(cellText=max_salary_exp_df.values, colLabels=max_salary_exp_df.columns, cellLoc='center', loc='upper center')
-	plt.text(0.5, 0.45, 'Min Salary by Job Title', horizontalalignment='center', verticalalignment='top', fontsize=16, color='black', wrap=True)
-	plt.table(cellText=min_salary_df.values, colLabels=min_salary_df.columns, cellLoc='center', loc='lower center')
+	plt.text(0.5, 1.03, 
+		  'Max Salary by Job Title', 
+		  horizontalalignment='center', 
+		  verticalalignment='top', 
+		  fontsize=16, 
+		  color='black', 
+		  wrap=True)
+	plt.table(cellText=max_salary_exp_df.values, 
+		   colLabels=max_salary_exp_df.columns, 
+		   cellLoc='center', 
+		   loc='upper center')
+	plt.text(0.5, 0.45, 
+		  'Min Salary by Job Title', 
+		  horizontalalignment='center', 
+		  verticalalignment='top', 
+		  fontsize=16, 
+		  color='black', 
+		  wrap=True)
+	plt.table(cellText=min_salary_df.values, 
+		   colLabels=min_salary_df.columns, 
+		   cellLoc='center', 
+		   loc='lower center')
 	pdf.savefig()
 	plt.close()
 	
 	#display average salary by job title and experience level
 	plt.figure(figsize=(8.5, 11)) #page size
 	plt.axis('off') #hide axes
-	plt.text(0.5, 1.03, 'Average Salary by Job Title and Experience Level', horizontalalignment='center', verticalalignment='top', fontsize=16, color='black', wrap=True)
-	plt.table(cellText=avg_salary_exp_df.values, colLabels=avg_salary_exp_df.columns, cellLoc='center', loc='upper center')
-	plt.text(0.5, 0.57, '*The average salary for entry and executive level Big Data, executive level for data scientist are not as accurate as other salaries given that the number of entries for these entries is lower.', horizontalalignment='center', verticalalignment='top', fontsize=8, color='black', wrap=True)
+	plt.text(0.5, 1.03, 
+		  'Average Salary by Job Title and Experience Level', 
+		  horizontalalignment='center', 
+		  verticalalignment='top', 
+		  fontsize=16, 
+		  color='black', 
+		  wrap=True)
+	plt.table(
+		cellText=avg_salary_exp_df.values, 
+		colLabels=avg_salary_exp_df.columns, 
+		cellLoc='center', loc='upper center')
+	plt.text(0.5, 0.57, 
+		  '*The average salary for entry and executive level Big Data, executive level for data scientist are not as accurate as other salaries given that the number of entries for these entries is lower.', 
+		  horizontalalignment='center', 
+		  verticalalignment='top', 
+		  fontsize=8, 
+		  color='black', 
+		  wrap=True)
 	pdf.savefig()
 	plt.close()
 	
 	#display difference in pay between experience levels for each job title
 	plt.figure(figsize=(8.5, 11)) #page size
 	plt.axis('off') #hide axes
-	plt.text(0.5, 1.03, 'Difference in Pay Between Experience Levels for Each Job Title', horizontalalignment='center', verticalalignment='top', fontsize=16, color='black', wrap=True)
-	plt.table(cellText=entry_diff[['Mid_vs_Entry']].reset_index().values, colLabels=['Job Title', 'Mid vs Entry ($)'], cellLoc='center', loc='upper center')
-	plt.table(cellText=mid_diff[['Senior_vs_Mid']].reset_index().values, colLabels=['Job Title', 'Senior vs Mid ($)'], cellLoc='center', loc='lower center')
+	plt.text(0.5, 1.03,
+		   'Difference in Pay Between Experience Levels for Each Job Title', 
+		   horizontalalignment='center', 
+		   verticalalignment='top', 
+		   fontsize=16, 
+		   color='black', 
+		   wrap=True)
+	#table with entry level vs mid level salary differences
+	table = plt.table(
+		cellText=entry_diff[['Mid_vs_Entry', 'Growth_%']].reset_index().values, 
+		colLabels=['Job Title', 'Mid vs Entry ($)', 'Growth (%)'], 
+		cellLoc='center', 
+		loc='upper center'
+	)
+	for row in range(1, len(mid_diff)+1):
+		table[(row, 2)].set_facecolor("#1bd76c")  # light yellow
+
+	plt.text(0.5, 0.8, 
+		  'The job with the biggest jump between entry and mid level is:' \
+		  '\n Data analyst with a 88.37% increase followed by Big Data with a 43.817% increase in average salary', 
+		  horizontalalignment='center', 
+		  verticalalignment='center', 
+		  fontsize=16, 
+		  color='black', 
+		  wrap=True)
+	#table with mid level vs senior level salary differences
+	table = plt.table(
+		cellText=mid_diff[['Senior_vs_Mid', 'Growth_%']].reset_index().values,
+		colLabels=['Job Title', 'Senior vs Mid ($)', 'Growth (%)'],
+		cellLoc='center',
+		loc='center'
+	)
+
+	for row in range(1, len(mid_diff)+1):
+		table[(row, 2)].set_facecolor("#1bd76c")  # light yellow
+
+	plt.text(0.5, 0.4, 
+		  'The job with the biggest jump between mid and senior level is:\n Data Scientist followed with a 72.45% increase in average salary followed by ML Ops with a 66.53% increase', 
+		  horizontalalignment='center', 
+		  verticalalignment='center', 
+		  fontsize=16, 
+		  color='black', 
+		  wrap=True)
 	pdf.savefig()
 	plt.close()
