@@ -126,7 +126,48 @@ with PdfPages('salary_report.pdf') as pdf:
 	pdf.savefig()
 	plt.close()
 
-	#display max and min salary by job title
+	fig, ax = plt.subplots(figsize=(8.5, 11)) #page size
+	ax.axis('off') #hide axes
+	ax.text(
+		0.03, 0.5,  # x and y position with padding from left and top
+		'This report provides only graphs and charts to better visualize the data and does not'
+		' include any raw data tables. The findings come from the Data Science Salaries dataset'
+		' found on Kaggle. The dataset includes salaries for various data science roles across '
+		'different countries and experience levels. The report highlights key insights such as'
+		' salary distributions, average salaries by job title and experience level, and '
+		'differences in pay between experience levels.',
+		ha='left',
+		va='top',
+		fontsize=20,
+		color='black',
+		wrap=True
+	)
+	fig.tight_layout(pad=2.0)
+	pdf.savefig(fig)
+	plt.close(fig)
+
+
+	# Bar graph: job distribution by continent
+	fig, ax = plt.subplots(figsize=(8.5, 5.5))
+	continents = continent_df['continent']
+	counts = continent_df['count']
+	bars = ax.bar(continents, counts, color='skyblue')
+	ax.set_title('Job Distribution by Continent', fontsize=18)
+	ax.set_xlabel('Continent', fontsize=14)
+	ax.set_ylabel('Number of Jobs', fontsize=14)
+	ax.tick_params(axis='x', rotation=0)
+	# Add value labels on top of each bar
+	for bar in bars:
+		height = bar.get_height()
+		ax.annotate(f'{height}',
+					xy=(bar.get_x() + bar.get_width() / 2, height),
+					xytext=(0, 3),  # 3 points vertical offset
+					textcoords="offset points",
+					ha='center', va='bottom', fontsize=12, color='black')
+	fig.tight_layout(pad=1.0)
+	pdf.savefig(fig)
+	plt.close(fig)
+
 	plt.figure(figsize=(8.5, 11)) #page size
 	plt.axis('off') #hide axes
 	plt.text(0.5, 1.03, 
