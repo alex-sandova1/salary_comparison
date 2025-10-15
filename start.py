@@ -2,7 +2,6 @@ import pandas as pd
 import sqlite3
 import math
 import matplotlib.pyplot as plt
-
 from utils import *
 from matplotlib.backends.backend_pdf import PdfPages
 
@@ -57,6 +56,10 @@ average_pay_df = pd.read_sql_query(query, conn)
 #print(average_pay_df)#data is broken down by job title and experience level
 #safe for pdf report
 
+query = get_query_by_label('queries.sql','jobs based on country on a specific continent')
+job_by_continent = pd.read_sql_query(query,conn)
+print(job_by_continent)
+
 #calculate difference in pay between experience levels for each job title
 
 # Calculate differences and growth BEFORE formatting as string
@@ -76,7 +79,7 @@ if 'Senior_vs_Mid' in mid_diff.columns:
 	mid_diff['Senior_vs_Mid'] = mid_diff['Senior_vs_Mid'].map(lambda x: f"{x:.2f}")
 if 'Growth_%' in mid_diff.columns:
 	mid_diff['Growth_%'] = mid_diff['Growth_%'].map(lambda x: f"{x:.2f}%")
-print(mid_diff)
+#print(mid_diff)
 
 
 
@@ -148,7 +151,7 @@ with PdfPages('salary_report.pdf') as pdf:
 
 
 	# Bar graph: job distribution by continent
-	fig, ax = plt.subplots(figsize=(8.5, 5.5))
+	fig, ax = plt.subplots(figsize=(8.5, 5))
 	continents = continent_df['continent']
 	counts = continent_df['count']
 	bars = ax.bar(continents, counts, color='skyblue')
@@ -156,6 +159,7 @@ with PdfPages('salary_report.pdf') as pdf:
 	ax.set_xlabel('Continent', fontsize=14)
 	ax.set_ylabel('Number of Jobs', fontsize=14)
 	ax.tick_params(axis='x', rotation=0)
+	ax.set_position([0.1, 0.1, 0.8, 0.8])
 	# Add value labels on top of each bar
 	for bar in bars:
 		height = bar.get_height()
@@ -167,6 +171,9 @@ with PdfPages('salary_report.pdf') as pdf:
 	fig.tight_layout(pad=1.0)
 	pdf.savefig(fig)
 	plt.close(fig)
+
+	fig, ax = plt.subplots(figsize=(8.5,5))
+
 
 	plt.figure(figsize=(8.5, 11)) #page size
 	plt.axis('off') #hide axes

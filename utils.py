@@ -22,6 +22,8 @@ def get_query_by_label(filename, label):
             return sql
     return None
 
+def get_query_by_location(filename, label, column):
+    
 
 #delete double entries based on all columns
 def remove_duplicates(df):
@@ -31,7 +33,6 @@ def remove_duplicates(df):
 def update_database(df, conn, table_name):
     df.to_sql(table_name, conn, if_exists='replace', index=False)
     conn.commit()
-
 
 
 #-----------------FILE FUNCTIONS-----------------
@@ -55,3 +56,12 @@ def plot_salary_distribution_by_title(df, title):
     plt.title(f'Salary Distribution for {title}')
     plt.show()
 
+#bar chart for job distribution by location
+def bar_distribution_by_location(df, location):
+    fig,ax = plt.subplots(figsize=(8.5, 5.5))
+    filtered_df = df[df['continent'] == location]
+    ax.bar(filtered_df['salary'], filtered_df['count'], color='skyblue')
+    ax.set_xlabel('Salary')
+    ax.set_ylabel('Count')
+    ax.set_title(f'Salary Distribution for {location}')
+    plt.show()
