@@ -65,10 +65,10 @@ WHERE continent IS NOT NULL AND continent != 'N/A'
 GROUP BY continent;
 
 --jobs based on country on a specific location
-SELECT continent, country, COUNT(*) AS job_count
+SELECT continent, country, location, COUNT(*) AS job_count
 FROM salaries
 WHERE continent = ? OR country = ? OR location = ?
-GROUP BY continent, country;
+GROUP BY continent, country, location;
 
 --experience level distribution  grouped by country then experience level
 SELECT country, experience_level, COUNT(*) AS count

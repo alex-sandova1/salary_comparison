@@ -31,7 +31,7 @@ conn.close()
 '''
 
 #update db with new dataframe
-#update_database(df, conn, 'salaries') #call when needed
+update_database(df, conn, 'salaries') #call when needed
 
 #-----------------------query data-----------------------
 
@@ -55,10 +55,6 @@ query = get_query_by_label('queries.sql', 'average pay by job based on experienc
 average_pay_df = pd.read_sql_query(query, conn)
 #print(average_pay_df)#data is broken down by job title and experience level
 #safe for pdf report
-
-query = get_query_by_label('queries.sql','jobs based on country on a specific continent')
-job_by_continent = pd.read_sql_query(query,conn)
-print(job_by_continent)
 
 #calculate difference in pay between experience levels for each job title
 
@@ -112,6 +108,8 @@ avg_salary_exp_df = pd.read_sql_query(query, conn)
 if 'average_salary' in avg_salary_exp_df.columns:
 	avg_salary_exp_df['average_salary'] = avg_salary_exp_df['average_salary'].map(lambda x: f"{x:.2f}")
 
+query = get_query_by_label('queries.sql', 'jobs based on country on a specific location')
+job_in_australia = pd.read_sql_query(query, conn, params=('Australia', None, None))
 
 #------------------------generate pdf report-----------------------
 
@@ -172,7 +170,27 @@ with PdfPages('salary_report.pdf') as pdf:
 	pdf.savefig(fig)
 	plt.close(fig)
 
-	fig, ax = plt.subplots(figsize=(8.5,5))
+	#bar graph of jobs in Australia
+	fig, ax = plt.subplots(figsize=(8.5, 5))
+	locations = job_in_australia['location']
+	counts = job_in_australia['job_count']
+	bars = ax.bar(locations, counts, color='lightgreen')
+	ax.set_title('Job Distribution in Australia', fontsize=18)
+	ax.set_xlabel('Country', fontsize=14)
+	ax.set_ylabel('Number of Jobs', fontsize=14)
+	ax.tick_params(axis='x', rotation=0)
+	ax.set_position([0.1, 0.1, 0.8, 0.8])
+	# Add value labels on top of each bar
+	for bar in bars:
+		height = bar.get_height()
+		ax.annotate(f'{height}',
+					xy=(bar.get_x() + bar.get_width() / 2, height),
+					xytext=(0, 3),  # 3 points vertical offset
+					textcoords="offset points",
+					ha='center', va='bottom', fontsize=12, color='black')
+	fig.tight_layout(pad=1.0)
+	pdf.savefig(fig)
+	plt.close(fig)
 
 
 	plt.figure(figsize=(8.5, 11)) #page size
