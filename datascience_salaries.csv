@@ -32,7 +32,7 @@
 40,Data scientist,Full Time,Mid,Sydney,USD,62000,Australia,Australia
 41,Data scientist,Full Time,Senior,Remote- US,USD,150000,United States,North America
 42,Data scientist,Full Time,Senior,Cambridge,USD,68000,United Kingdom,Europe
-44,Data scientist,Full Time,Mid,La Libertad,USD,40000,Peru,South America
+44,Data scientist,Full Time,Mid,La Libertad,USD,40000,Peru,SouthAmerica
 45,Data scientist,Full Time,Senior,San Francisco,USD,161000,United States,North America
 47,Data scientist,Full Time,Senior,London,USD,68000,United Kingdom,Europe
 48,Data scientist,Full Time,Senior,Lithuania | UK,USD,68000,United Kingdom,Europe
@@ -52,12 +52,12 @@
 68,Data scientist,Full Time,Senior,Athens,USD,68000,Greece,Europe
 69,Data scientist,Internship,Senior,London,USD,56000,United Kingdom,Europe
 70,Data scientist,Full Time,Entry,Charenton-Le-Pont,USD,36000,France,Europe
-72,Data scientist,Full Time,Senior,San Francisco,USD,68000,United States,North America
+72,Data scientist,Full Time,Senior,San Francisco,USD,68000,UnitedStates,North America
 73,Data scientist,Full Time,Senior,Aberdeen,USD,68000,United Kingdom,Europe
 75,Data scientist,Full Time,Mid,Brampton,USD,40000,Canada,North America
-78,Data scientist,Full Time,Senior,Salt Lake City,USD,68000, United States,North America
-79,Data scientist,Full Time,Mid,Munich,USD,40000, Germany,Europe
-80,Data scientist,Full Time,Mid,Oslo,USD,40000,Norway,Europe
+78,Data scientist,Full Time,Senior,Salt Lake City,USD,68000, United States, North America
+79,Data scientist,Full Time,Mid,Munich,USD,40000, Germany, Europe
+80,Data scientist,Full Time,Mid,Oslo,USD,40000, Norway, Europe
 81,Data scientist,Full Time,Senior,Basel,USD,68000,Switzerland,Europe
 82,Data scientist,Full Time,Mid,Düsseldorf,USD,40000,Germany,Europe
 83,Data scientist,Full Time,Entry,Paris,USD,36000,France,Europe

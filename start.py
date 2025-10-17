@@ -1,6 +1,5 @@
 import pandas as pd
 import sqlite3
-import math
 import matplotlib.pyplot as plt
 from utils import *
 from matplotlib.backends.backend_pdf import PdfPages
@@ -85,7 +84,6 @@ job_salary_count_df = pd.read_sql_query(query, conn)
 #print(job_salary_count_df)#counts the number of jobs based on experience level
 #safe for pdf report
 
-
 # max salary by job title and experience level
 query = get_query_by_label('queries.sql', 'max salary by job title and experience level')
 max_salary_exp_df = pd.read_sql_query(query, conn)
@@ -107,9 +105,6 @@ avg_salary_exp_df = pd.read_sql_query(query, conn)
 # Format average_salary column to two decimal places if it exists
 if 'average_salary' in avg_salary_exp_df.columns:
 	avg_salary_exp_df['average_salary'] = avg_salary_exp_df['average_salary'].map(lambda x: f"{x:.2f}")
-
-query = get_query_by_label('queries.sql', 'jobs based on country on a specific location')
-job_in_australia = pd.read_sql_query(query, conn, params=('Australia', None, None))
 
 #------------------------generate pdf report-----------------------
 
@@ -147,6 +142,22 @@ with PdfPages('salary_report.pdf') as pdf:
 	pdf.savefig(fig)
 	plt.close(fig)
 
+	fig, ax = plt.subplots(figsize=(8.5, 5))
+	ax.axis('off')
+	ax.text(
+		0.03,0.5,
+		'The following pages will contain various graphs and charts that will ' \
+		'show various insights derived from the dataset overall, insights regarding'\
+		'regions and locations will follow.',
+		ha='left',
+		va = 'top',
+		fontsize=16,
+		color='black',
+		wrap=True
+	)
+	fig.tight_layout(pad=2.0)
+	pdf.savefig(fig)
+	plt.close(fig)
 
 	# Bar graph: job distribution by continent
 	fig, ax = plt.subplots(figsize=(8.5, 5))
@@ -169,29 +180,6 @@ with PdfPages('salary_report.pdf') as pdf:
 	fig.tight_layout(pad=1.0)
 	pdf.savefig(fig)
 	plt.close(fig)
-
-	#bar graph of jobs in Australia
-	fig, ax = plt.subplots(figsize=(8.5, 5))
-	locations = job_in_australia['location']
-	counts = job_in_australia['job_count']
-	bars = ax.bar(locations, counts, color='lightgreen')
-	ax.set_title('Job Distribution in Australia', fontsize=18)
-	ax.set_xlabel('Country', fontsize=14)
-	ax.set_ylabel('Number of Jobs', fontsize=14)
-	ax.tick_params(axis='x', rotation=0)
-	ax.set_position([0.1, 0.1, 0.8, 0.8])
-	# Add value labels on top of each bar
-	for bar in bars:
-		height = bar.get_height()
-		ax.annotate(f'{height}',
-					xy=(bar.get_x() + bar.get_width() / 2, height),
-					xytext=(0, 3),  # 3 points vertical offset
-					textcoords="offset points",
-					ha='center', va='bottom', fontsize=12, color='black')
-	fig.tight_layout(pad=1.0)
-	pdf.savefig(fig)
-	plt.close(fig)
-
 
 	plt.figure(figsize=(8.5, 11)) #page size
 	plt.axis('off') #hide axes
@@ -254,6 +242,7 @@ with PdfPages('salary_report.pdf') as pdf:
 		   fontsize=16, 
 		   color='black', 
 		   wrap=True)
+	
 	#table with entry level vs mid level salary differences
 	table = plt.table(
 		cellText=entry_diff[['Mid_vs_Entry', 'Growth_%']].reset_index().values, 
@@ -292,3 +281,58 @@ with PdfPages('salary_report.pdf') as pdf:
 		  wrap=True)
 	pdf.savefig()
 	plt.close()
+
+##############	Australia  ############
+
+	query = get_query_by_label('queries.sql', 'jobs based on a specific location')
+	job_in_australia = pd.read_sql_query(query, conn, params=('Australia', None, None))
+	
+	query = get_query_by_label('queries.sql', 'job information based on specific location')
+	info_australia = pd.read_sql_query(query, conn, params=('Australia',))
+
+
+	fig,ax = plt.subplots(figsize=(8, 11))
+	ax.axis('off')
+	ax.text(0.5, 0.95,
+		 'The following charts and graphs show the distribution of jobs'\
+		 'in Australia and other insights.',
+		 horizontalalignment='center',
+		 verticalalignment='top',
+		 fontsize=10,
+		 color='black',
+		 wrap=True)
+	pdf.savefig(fig)
+	plt.close(fig)
+
+	#job distribution in Australia
+	fig,ax = plt.subplots(figsize=(10,5))
+	fig.text(0.5, 0.95,
+		 'Job Distribution in Australia',
+		 horizontalalignment='center',
+		 verticalalignment='top',
+		 fontsize=14,
+		 color='black',
+		 wrap=False)
+	locations = job_in_australia['location']
+	counts = job_in_australia['job_count']
+	ax.pie(counts, labels=locations, autopct='%1.1f%%', startangle=140)
+	pdf.savefig(fig)
+	plt.close(fig)
+	#info about australia jobs
+	fig,ax = plt.subplots(figsize=(8.5, 11))
+	ax.axis('off')
+	ax.text(0.5, 0.95,
+		 'Information about Jobs in Australia',
+		 horizontalalignment='center',
+		 verticalalignment='top',
+		 fontsize=14,
+		 color='black',
+		 wrap=True)
+	table = plt.table(
+		cellText=info_australia.values,
+		colLabels=info_australia.columns,
+		cellLoc='center',
+		loc='center'
+	)
+	pdf.savefig(fig)
+	plt.close(fig)

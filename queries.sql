@@ -64,12 +64,6 @@ FROM salaries
 WHERE continent IS NOT NULL AND continent != 'N/A'
 GROUP BY continent;
 
---jobs based on country on a specific location
-SELECT continent, country, location, COUNT(*) AS job_count
-FROM salaries
-WHERE continent = ? OR country = ? OR location = ?
-GROUP BY continent, country, location;
-
 --experience level distribution  grouped by country then experience level
 SELECT country, experience_level, COUNT(*) AS count
 FROM salaries
@@ -109,3 +103,16 @@ GROUP BY job_title, experience_level;
 SELECT job_title, experience_level, AVG(salary) AS average_salary
 FROM salaries
 GROUP BY job_title, experience_level;
+
+--jobs based on a specific location
+SELECT continent, country, location, COUNT(*) AS job_count
+FROM salaries
+WHERE continent = ? OR country = ? OR location = ?
+GROUP BY continent, country, location;
+
+--job information based on specific location
+SELECT location, salary, job_title, job_type, experience_level, COUNT(*) AS count
+FROM salaries
+WHERE country = ?
+GROUP BY experience_level, salary, job_title, job_type, experience_level
+ORDER BY location;
