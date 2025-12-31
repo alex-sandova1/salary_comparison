@@ -25,12 +25,6 @@ FROM salaries
 ORDER BY salary 
 ASC LIMIT 1;
 
-
---number of employees per job title
-SELECT job_title, COUNT(*) AS count
-FROM salaries
-GROUP BY job_title;
-
 --median salary
 SELECT AVG(salary) AS median_salary
 FROM (
