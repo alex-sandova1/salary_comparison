@@ -22,10 +22,6 @@ def get_query_by_label(filename, label):
             return sql
     return None
 
-def get_query_by_location(filename, label, column):
-    # TODO: Implement this function
-    pass
-    
 
 #delete double entries based on all columns
 def remove_duplicates(df):
