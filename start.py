@@ -229,7 +229,7 @@ with PdfPages(REPORT_PATH) as pdf:
 	plt.text(
 		0.5,
 		0.57,
-		"*The average salary for entry and executive level Big Data, executive level for data scientist are not as accurate as other salaries given that the number of entries for these entries is lower.",
+		"The average salary for entry level Big Data and executive level for big data and data scientist are not as accurate as other salaries given\n that the number  of entries for these entries is lower.",
 		ha="center",
 		va="top",
 		fontsize=8,
@@ -243,7 +243,7 @@ with PdfPages(REPORT_PATH) as pdf:
 	plt.text(
 		0.5,
 		1.03,
-		"Difference in Pay Between Experience Levels for Each Job Title",
+		"Difference in pay Between Experience Levels for Each Job Title",
 		ha="center",
 		va="top",
 		fontsize=16,
