@@ -1,112 +1,20 @@
--- average salary
-SELECT AVG(salary) AS average_salary 
-FROM salaries;
-
---average salary by job title
-SELECT job_title, AVG(salary) AS average_salary
+--jobs by location
+SELECT {location} AS location, COUNT(*) AS job_count
 FROM salaries
-GROUP BY job_title;
+WHERE {location} IS NOT NULL
+GROUP BY {location}
+ORDER BY job_count DESC;
 
---amount of each job title
-SELECT job_title, COUNT(*) 
-AS count 
-FROM salaries 
-GROUP BY job_title;
-
---highest salary
-SELECT * 
-FROM salaries 
-ORDER BY salary 
-DESC LIMIT 1;
-
---lowest salary
-SELECT * 
-FROM salaries 
-ORDER BY salary 
-ASC LIMIT 1;
-
---median salary
-SELECT AVG(salary) AS median_salary
-FROM (
-    SELECT salary
-    FROM salaries
-    ORDER BY salary
-    LIMIT 2 - (SELECT COUNT(*) FROM salaries) % 2
-    OFFSET (SELECT (COUNT(*) - 1) / 2 FROM salaries)
-) AS median_subquery;
-
---jobs based on location except remote
-SELECT location, COUNT(*) AS count
+--jobs by country in continent
+SELECT country AS location, COUNT(*) AS job_count
 FROM salaries
-WHERE location NOT LIKE '%Remote%' AND location NOT LIKE '%work%' 
-GROUP BY location;
+WHERE continent = ?
+    AND country IS NOT NULL
+GROUP BY country
+ORDER BY job_count DESC;
 
---remote jobs
-SELECT COUNT(*) AS remote_job_count
+--continent list
+SELECT DISTINCT continent
 FROM salaries
-WHERE location = 'Remote';
-
---jobs based on country
-SELECT country, COUNT(*) AS count
-FROM salaries
-WHERE country IS NOT NULL AND country != 'N/A'
-GROUP BY country;
-
---jobs based on continent
-SELECT continent, COUNT(*) AS count
-FROM salaries
-WHERE continent IS NOT NULL AND continent != 'N/A'
-GROUP BY continent;
-
---experience level distribution  grouped by country then experience level
-SELECT country, experience_level, COUNT(*) AS count
-FROM salaries
-GROUP BY country, experience_level;
-
---average pay by job based on experience level
-SELECT job_title, experience_level, AVG(salary) AS average_salary
-FROM salaries
-GROUP BY job_title, experience_level;
-
---count of job salary based on experience level and job title
-SELECT job_title, experience_level, COUNT(*) AS count
-FROM salaries
-GROUP BY job_title, experience_level;
-
---max salary by job title
-SELECT job_title, MAX(salary) AS max_salary
-FROM salaries
-GROUP BY job_title;
-
---lowest salary by job title
-SELECT job_title, MIN(salary) AS min_salary
-FROM salaries
-GROUP BY job_title;
-
---max salary by job title and experience level
-SELECT job_title, experience_level, MAX(salary) AS max_salary
-FROM salaries
-GROUP BY job_title, experience_level;
-
---min salary by job title and experience level
-SELECT job_title, experience_level, MIN(salary) AS min_salary
-FROM salaries
-GROUP BY job_title, experience_level;
-
---average salary by job title and experience level
-SELECT job_title, experience_level, AVG(salary) AS average_salary
-FROM salaries
-GROUP BY job_title, experience_level;
-
---jobs based on a specific location
-SELECT continent, country, location, COUNT(*) AS job_count
-FROM salaries
-WHERE continent = ? OR country = ? OR location = ?
-GROUP BY continent, country, location;
-
---job information based on specific location
-SELECT location, salary, job_title, job_type, experience_level, COUNT(*) AS count
-FROM salaries
-WHERE country = ?
-GROUP BY experience_level, salary, job_title, job_type, experience_level
-ORDER BY location;
+WHERE continent IS NOT NULL
+ORDER BY continent;

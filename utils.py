@@ -1,65 +1,69 @@
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 
-#-----------------DATAFRAME FUNCTIONS-----------------
-
-#Extract a specific query from the SQL file using a label
-def get_query_by_label(filename, label):
-    with open(filename, 'r') as f:
-        content = f.read()
-    # Split by comment lines
-    queries = content.split('--')
-    for q in queries:
-        lines = q.strip().splitlines()
-        if not lines:
-            continue
-        comment = lines[0].strip().lower()
-        sql = '\n'.join(lines[1:]).strip()
-        if label.lower() in comment and sql:
-            # Remove trailing semicolon if present
-            if sql.endswith(';'):
-                sql = sql[:-1]
-            return sql
-    return None
-
-
-#delete double entries based on all columns
-def remove_duplicates(df):
-    return df.drop_duplicates()
-
-#update db with new dataframe
-def update_database(df, conn, table_name):
-    df.to_sql(table_name, conn, if_exists='replace', index=False)
-    conn.commit()
-
-
-#-----------------FILE FUNCTIONS-----------------
-
-#graph salary distribution
-def plot_salary_distribution(df):
-    import matplotlib.pyplot as plt
-    df['salary'].hist()
-    plt.xlabel('Salary')
-    plt.ylabel('Count')
-    plt.title('Salary Distribution')
-    plt.show()
-
-#graph salary distribution by job title
-def plot_salary_distribution_by_title(df, title):
-    import matplotlib.pyplot as plt
-    filtered_df = df[df['job_title'] == title]
-    filtered_df['salary'].hist()
-    plt.xlabel('Salary')
-    plt.ylabel('Count')
-    plt.title(f'Salary Distribution for {title}')
-    plt.show()
-
-#bar chart for job distribution by location
-def bar_distribution_by_location(df, location):
-    fig,ax = plt.subplots(figsize=(8.5, 5.5))
-    filtered_df = df[df['continent'] == location]
-    ax.bar(filtered_df['salary'], filtered_df['count'], color='skyblue')
-    ax.set_xlabel('Salary')
+def plot_by_location(df, location):
+    location_label = location.strip().capitalize()
+    fig, ax = plt.subplots(figsize=(10, 6))
+    df.plot(kind='bar', x='location', y='job_count', legend=False, ax=ax)
+    ax.set_title(f'Job Count by {location_label}')
+    ax.set_xlabel(location_label)
     ax.set_ylabel('Count')
-    ax.set_title(f'Salary Distribution for {location}')
-    plt.show()
+    ax.tick_params(axis='x', rotation=45)
+    
+    for container in ax.containers:
+        ax.bar_label(container, fmt='%.0f', padding=3)
+        
+    max_count = df["job_count"].max()
+    ax.set_ylim(0, max_count * 1.2)
+    fig.tight_layout()
+    return fig
+
+def table_pages_by_location(df, location, title=None, rows_per_page=28):
+    location_label = location.strip().capitalize()
+    table_df = df[["location", "job_count"]].copy()
+    table_df.columns = [location_label, "Job Count"]
+
+    figures = []
+    total_pages = (len(table_df) + rows_per_page - 1) // rows_per_page
+
+    for page_idx in range(total_pages):
+        start = page_idx * rows_per_page
+        end = start + rows_per_page
+        page_df = table_df.iloc[start:end]
+
+        # A4 portrait size; gives more vertical space for long tables
+        fig, ax = plt.subplots(figsize=(8.27, 11.69))
+        ax.axis("off")
+
+        page_title = title or f"Job Count by {location_label}"
+        if total_pages > 1:
+            page_title = f"{page_title} (Page {page_idx + 1}/{total_pages})"
+
+        ax.set_title(page_title, fontsize=13, y=0.98)
+
+        # Keep short tables compact instead of stretching them to fill the page.
+        n_rows = len(page_df)
+        table_height = min(0.82, max(0.18, 0.06 + n_rows * 0.03))
+        top_margin = 0.12
+        bottom_margin = 0.06
+        y0 = bottom_margin + ((1 - top_margin - bottom_margin) - table_height) / 2
+
+        table = ax.table(
+            cellText=page_df.values,
+            colLabels=page_df.columns,
+            cellLoc="center",
+            colLoc="center",
+            # Leaves top margin so title does not overlap table
+            bbox=[0.05, y0, 0.90, table_height],
+        )
+
+        table.auto_set_font_size(False)
+        table.set_fontsize(9)
+        table.scale(1, 1.0)
+
+        figures.append(fig)
+
+    return figures
+
+def plot_by_continent(df):
+    return plot_by_location(df, "continent")
