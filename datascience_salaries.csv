@@ -119,7 +119,7 @@
 155,Data scientist,Full Time,Senior,Chicago,USD,68000,United States,North America
 156,Data scientist,Full Time,Entry,Norfolk,USD,36000,United States,North America
 157,Data scientist,Full Time,Senior,Boston,USD,68000,United States,North America
-158,Data scientist,Full Time,Senior,Remote (DC),USD,68000,United States,North America
+158,Data scientist,Full Time,Senior,Remote,USD,68000,United States,North America
 159,Data scientist,Full Time,Senior,Bengaluru,USD,68000,India,Asia
 160,Data scientist,Full Time,Senior,Tel Aviv-Yafo,USD,68000,Israel,Asia
 161,Data scientist,Full Time,Mid,Houston,USD,40000,United States,North America
@@ -167,8 +167,8 @@
 208,Data scientist,Full Time,Senior,Berlin,USD,68000,Germany,Europe
 209,Data scientist,Full Time,Mid,Paris,USD,40000,France,Europe
 210,Data scientist,Full Time,Entry,Burnaby,USD,36000,Canada,North America
-212,Data scientist,Full Time,Senior,Remote - United States,USD,56000,United States,North America
-213,Data scientist,Full Time,Senior,Remote - US,USD,68000,United States,North America
+212,Data scientist,Full Time,Senior,Remote,USD,56000,United States,North America
+213,Data scientist,Full Time,Senior,Remote,USD,68000,United States,North America
 215,Data scientist,Full Time,Senior,India,USD,68000,India,Asia
 216,Data scientist,Full Time,Senior,Remote,USD,68000,United States,North America
 217,Data scientist,Full Time,Senior,Heredia,USD,68000,Costa Rica,North America
@@ -199,9 +199,9 @@
 247,Data scientist,Full Time,Senior,London,USD,68000,United Kingdom,Europe
 248,Data scientist,Full Time,Mid,Bang Kapi District,USD,40000,Thailand,Asia
 249,Data scientist,Full Time,Senior,London,USD,68000,United Kingdom,Europe
-250,Data scientist,Full Time,Senior,Remote job,USD,68000,United States,North America
+250,Data scientist,Full Time,Senior,Remote,USD,68000,United States,North America
 251,Data scientist,Full Time,Senior,Tel Aviv,USD,68000,Israel,Asia
-252,Data scientist,Full Time,Senior,Remote job,USD,68000,United States,North America
+252,Data scientist,Full Time,Senior,Remote,USD,68000,United States,North America
 253,Data scientist,Full Time,Senior,Amsterdam,USD,120000,Netherlands,Europe
 254,Data scientist,Full Time,Mid,København,USD,40000,Denmark,Europe
 255,Data scientist,Full Time,Senior,Cincinnati,USD,68000,United States,North America
@@ -331,12 +331,12 @@
 412,Data scientist,Full Time,Senior,Brooklyn,USD,184000,United States,North America
 413,Data scientist,Full Time,Mid,Bühl,USD,38000,Germany,Europe
 415,Data scientist,Full Time,Senior,Mountain View,USD,68000,United States,North America
-416,Data scientist,Full Time,Senior,Remote or San Francisco HQ,USD,196000,United States,North America
+416,Data scientist,Full Time,Senior,Remote,USD,196000,United States,North America
 417,Data scientist,Full Time,Senior,Oakville,USD,68000,Canada,North America
 418,Data scientist,Full Time,Senior,Chennai,USD,68000,India,Asia
 419,Data scientist,Full Time,Mid,Houston,USD,38000,United States,North America
 420,Data scientist,Full Time,Senior,New York City,USD,68000,United States,North America
-421,Data scientist,Full Time,Senior,Remote (within United States),USD,68000,United States,North America
+421,Data scientist,Full Time,Senior,Remote,USD,68000,United States,North America
 422,Data scientist,Full Time,Senior,Los Gatos,USD,56000,United States,North America
 423,Data scientist,Full Time,Mid,Houston,USD,38000,United States,North America
 424,Data scientist,Full Time,Senior,Boston,USD,127000,United States,North America
@@ -401,7 +401,7 @@
 509,Data analyst,Full Time,Senior,Jakarta,USD,63000,Indonesia,Asia
 510,Data analyst,Full Time,Senior,Chicago,USD,63000,United States,North America
 512,Data analyst,Full Time,Senior,Lexington,USD,63000,United States,North America
-513,Data analyst,Full Time,Senior,Remote job,USD,63000,United States,North America
+513,Data analyst,Full Time,Senior,Remote,USD,63000,United States,North America
 514,Data analyst,Full Time,Mid,Barcelona,USD,51000,Spain,Europe
 515,Data analyst,Full Time,Mid,Bogotá,USD,45000,Colombia,South America
 518,Data analyst,Full Time,Senior,United States,USD,76000,United States,North America
@@ -584,7 +584,7 @@
 813,Data analyst,Full Time,Senior,Remote,USD,76000,United States,North America
 814,Data analyst,Full Time,Senior,Arlington,USD,90000,United States,North America
 815,Data analyst,Full Time,Senior,New York City,USD,70000,United States,North America
-816,Data analyst,Full Time,Senior,Remote US,USD,63000,United States,North America
+816,Data analyst,Full Time,Senior,Remote,USD,63000,United States,North America
 817,Data analyst,Full Time,Senior,Montreal,USD,63000,Canada,North America
 818,Data analyst,Full Time,Mid,Minato City,USD,51000,Japan,Asia
 819,Data analyst,Full Time,Mid,Brampton,USD,51000,Canada,North America
@@ -673,7 +673,7 @@
 952,Data analyst,Full Time,Senior,Jakarta,USD,63000,Indonesia,Asia
 953,Data analyst,Full Time,Senior,São Paulo,USD,63000,Brazil,South America
 954,Data analyst,Full Time,Entry,London,USD,30000,United Kingdom,Europe
-955,Data analyst,Full Time,Entry,Remote job,USD,30000,Remote,North America
+955,Data analyst,Full Time,Entry,Remote,USD,30000,Remote,North America
 956,Data analyst,Full Time,Senior,New York City,USD,110000,United States,North America
 957,Data analyst,Full Time,Entry,Modena,USD,30000,Italy,Europe
 958,Data analyst,Full Time,Mid,Aventura,USD,51000,United States,North America
@@ -907,7 +907,7 @@
 1551,Machine learning,Full Time,Mid,Athens,USD,43000,Greece,Europe
 1552,Machine learning,Full Time,Senior,Cambridge,USD,68000,United Kingdom,Europe
 1555,Machine learning,Full Time,Senior,Remote,USD,150000,United States,North America
-1556,Machine learning,Full Time,Senior,Remote Canada,USD,63000,Canada,North America
+1556,Machine learning,Full Time,Senior,Remote,USD,63000,Canada,North America
 1558,Machine learning,Full Time,Senior,United States,USD,45000,United States,North America
 1562,Machine learning,Full Time,Mid,Cape Town,USD,51000,South Africa,Africa
 1564,Machine learning,Full Time,Senior,Cambridge,USD,63000,United Kingdom,Europe
@@ -917,7 +917,7 @@
 1583,Machine learning,Full Time,Mid,Athens,USD,63000,Greece,Europe
 1584,Machine learning,Full Time,Mid,London,USD,43000,United Kingdom,Europe
 1585,Machine learning,Full Time,Senior,Brooklyn,USD,196000,United States,North America
-1586,Machine learning,Full Time,Senior,Remote Canada,USD,63000,Canada,North America
+1586,Machine learning,Full Time,Senior,Remote,USD,63000,Canada,North America
 1588,Machine learning,Full Time,Senior,Kyiv,USD,30000,Ukraine,Europe
 1589,Machine learning,Full Time,Senior,Remote,USD,177000,United States,North America
 1590,Machine learning,Full Time,Senior,Bengaluru,USD,63000,India,Asia
@@ -951,7 +951,7 @@
 1656,Machine learning,Full Time,Senior,Munich,USD,45000,Germany,Europe
 1657,Machine learning,Full Time,Senior,Lisbon,USD,45000,Portugal,Europe
 1658,Machine learning,Full Time,Senior,Santa Clara,USD,68000,United States,North America
-1659,Machine learning,Full Time,Senior,Remote US,USD,45000,United States,North America
+1659,Machine learning,Full Time,Senior,Remote,USD,45000,United States,North America
 1663,Machine learning,Full Time,Senior,United States,USD,63000,United States,North America
 1666,Machine learning,Internship,Mid,Remote,USD,63000,United States,North America
 1667,Machine learning,Full Time,Entry,Calabasas,USD,120000,United States,North America
@@ -991,7 +991,7 @@
 1750,Machine learning,Full Time,Senior,Palo Alto,USD,45000,United States,North America
 1753,Machine learning,Full Time,Entry,San Francisco,USD,140000,United States,North America
 1756,Machine learning,Full Time,Mid,Paris,USD,51000,France,Europe
-1757,Machine learning,Full Time,Senior,US Remote,USD,183000,United States,North America
+1757,Machine learning,Full Time,Senior,Remote,USD,183000,United States,North America
 1763,Machine learning,Full Time,Senior,Beaverton,USD,63000,United States,North America
 1767,Machine learning,Full Time,Senior,Remote,USD,45000,United States,North America
 1769,Machine learning,Full Time,Senior,Toronto,USD,68000,Canada,North America
@@ -1043,7 +1043,7 @@
 1873,Machine learning,Full Time,Senior,United States,USD,45000,United States,North America
 1877,Machine learning,Full Time,Senior,London,USD,45000,United Kingdom,Europe
 1881,Machine learning,Full Time,Senior,Brooklyn,USD,196000,United States,North America
-1883,Machine learning,Full Time,Senior,US Remote,USD,120000,United States,North America
+1883,Machine learning,Full Time,Senior,Remote,USD,120000,United States,North America
 1884,Machine learning,Full Time,Senior,United States,USD,63000,United States,North America
 1885,Machine learning,Full Time,Senior,Remote,USD,63000,United States,North America
 1886,Machine learning,Full Time,Senior,United States,USD,45000,United States,North America
@@ -1066,7 +1066,7 @@
 1938,Machine learning,Full Time,Mid,Roppongi,USD,62000,Japan,Asia
 1939,Machine learning,Full Time,Senior,Valencia,USD,68000,Spain,Europe
 1941,Machine learning,Full Time,Senior,Remote,USD,100000,United States,North America
-1946,Machine learning,Full Time,Senior,Remote Canada,USD,45000,Canada,North America
+1946,Machine learning,Full Time,Senior,Remote,USD,45000,Canada,North America
 1949,Machine learning,Full Time,Mid,South Jakarta,USD,43000,Indonesia,Asia
 1955,Machine learning,Full Time,Senior,Seattle,USD,68000,United States,North America
 1958,Machine learning,Full Time,Senior,Canada,USD,45000,Canada,North America

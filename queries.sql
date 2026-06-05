@@ -18,3 +18,11 @@ SELECT DISTINCT continent
 FROM salaries
 WHERE continent IS NOT NULL
 ORDER BY continent;
+
+--job titles by location
+SELECT DISTINCT country AS location, job_title, experience_level, salary
+FROM salaries
+WHERE continent = ?
+  AND country IS NOT NULL
+  AND job_title IS NOT NULL
+ORDER BY country, job_title;

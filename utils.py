@@ -67,3 +67,4 @@ def table_pages_by_location(df, location, title=None, rows_per_page=28):
 
 def plot_by_continent(df):
     return plot_by_location(df, "continent")
+

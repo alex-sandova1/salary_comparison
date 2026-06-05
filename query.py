@@ -53,7 +53,28 @@ def group_country(conn, continent):
 def count_jobs_by_country_in_continent(conn, continent):
     return group_country(conn, continent)
 
-#Quiery continent list
+#Query continent list
 def get_continents(conn):
     sql_template = get_query_by_label("queries.sql", "continent list")
     return pd.read_sql_query(sql_template, conn)
+
+#Query to get job titles by location
+def jobs_by_location(conn, location):
+    get_query_template = get_query_by_label("queries.sql", "job titles by location")
+    return pd.read_sql_query(get_query_template, conn, params=[location])
+
+def avg_salary_by_location(df, location_col="location", salary_col="salary"):
+    if location_col not in df.columns or salary_col not in df.columns:
+        raise ValueError("DataFrame must include location and salary columns")
+
+    work = df[[location_col, salary_col]].copy()
+    work[salary_col] = pd.to_numeric(work[salary_col], errors="coerce")
+    work = work.dropna(subset=[location_col, salary_col])
+
+    result = (
+        work.groupby(location_col, as_index=False)[salary_col]
+        .mean()
+        .rename(columns={salary_col: "avg_salary"})
+        .sort_values("avg_salary", ascending=False)
+    )
+    return result
