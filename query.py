@@ -58,11 +58,22 @@ def get_continents(conn):
     sql_template = get_query_by_label("queries.sql", "continent list")
     return pd.read_sql_query(sql_template, conn)
 
-#Query to get job titles by location
+#Query to get job titles by continent
+def jobs_by_continent(conn, continent):
+    get_query_template = get_query_by_label("queries.sql", "jobs by continent")
+    return pd.read_sql_query(get_query_template, conn, params=[continent])
+
+#Query to get job titles by country
+def jobs_by_country(conn, country):
+    get_query_template = get_query_by_label("queries.sql", "job by country")
+    return pd.read_sql_query(get_query_template, conn, params=[country])
+
+#Query to get job titles by location (states, cities, etc.)
 def jobs_by_location(conn, location):
-    get_query_template = get_query_by_label("queries.sql", "job titles by location")
+    get_query_template = get_query_by_label("queries.sql", "job by location")
     return pd.read_sql_query(get_query_template, conn, params=[location])
 
+#finds the average salary by location using the jobs_by_location query result as input
 def avg_salary_by_location(df, location_col="location", salary_col="salary"):
     if location_col not in df.columns or salary_col not in df.columns:
         raise ValueError("DataFrame must include location and salary columns")
@@ -77,4 +88,33 @@ def avg_salary_by_location(df, location_col="location", salary_col="salary"):
         .rename(columns={salary_col: "avg_salary"})
         .sort_values("avg_salary", ascending=False)
     )
+    return result
+
+#find how many of each job based on experience level in continent using the group_country query result as input
+def count_jobs_by_country(df, country_col="country", job_col="job_title"):
+    if country_col not in df.columns or job_col not in df.columns:
+        raise ValueError("DataFrame must include country and job_title columns")
+
+    work = df[[country_col, job_col]].copy()
+    work = work.dropna(subset=[country_col, job_col])
+
+    result = (
+        work.groupby(country_col, as_index=False)[job_col]
+        .value_counts()
+        .rename(columns={job_col: "job_count"})
+        .sort_values("job_count", ascending=False)
+    )
+    return result
+
+#get highest paying job by location using the jobs_by_location query result as input
+def highest_paying_job_by_location(df, location_col="location", job_col="job_title", salary_col="salary"):
+    if location_col not in df.columns or job_col not in df.columns or salary_col not in df.columns:
+        raise ValueError("DataFrame must include location, job_title, and salary columns")
+
+    work = df[[location_col, job_col, salary_col]].copy()
+    work[salary_col] = pd.to_numeric(work[salary_col], errors="coerce")
+    work = work.dropna(subset=[location_col, job_col, salary_col])
+
+    idx = work.groupby(location_col)[salary_col].idxmax()
+    result = work.loc[idx].reset_index(drop=True)
     return result
