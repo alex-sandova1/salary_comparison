@@ -1,3 +1,18 @@
+--jobs by location
+SELECT {location} AS location, COUNT(*) AS job_count
+FROM salaries
+WHERE {location} IS NOT NULL
+GROUP BY {location}
+ORDER BY job_count DESC, {location};
+
+--jobs by country in continent
+SELECT country AS location, COUNT(*) AS job_count
+FROM salaries
+WHERE continent = ?
+  AND country IS NOT NULL
+GROUP BY country
+ORDER BY job_count DESC, country;
+
 --jobs by continent
 SELECT continent, country, job_title, experience_level
 FROM salaries
@@ -20,7 +35,7 @@ WHERE location = ?
 ORDER BY location, job_title, experience_level;
 
 --continent list
-SELECT continent
+SELECT DISTINCT continent
 FROM salaries
 WHERE continent IS NOT NULL
 ORDER BY continent;
@@ -32,3 +47,20 @@ WHERE continent = ?
   AND country IS NOT NULL
   AND job_title IS NOT NULL
 ORDER BY country, job_title;
+
+--job summary by location in country
+SELECT
+  location,
+  job_title,
+  experience_level,
+  COUNT(*) AS job_count,
+  AVG(salary) AS avg_salary
+FROM salaries
+WHERE country = ?
+  AND country IS NOT NULL
+  AND location IS NOT NULL
+  AND job_title IS NOT NULL
+  AND experience_level IS NOT NULL
+  AND salary IS NOT NULL
+GROUP BY location, job_title, experience_level
+ORDER BY location, job_title, experience_level;

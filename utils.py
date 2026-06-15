@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 
+#plots data based on location
 def plot_by_location(df, location):
     location_label = location.strip().capitalize()
     fig, ax = plt.subplots(figsize=(10, 6))
@@ -18,6 +19,7 @@ def plot_by_location(df, location):
     fig.tight_layout()
     return fig
 
+#plots tables based on location
 def table_pages_by_location(df, location, title=None, rows_per_page=28):
     location_label = location.strip().capitalize()
     table_df = df[["location", "job_count"]].copy()
@@ -65,6 +67,54 @@ def table_pages_by_location(df, location, title=None, rows_per_page=28):
 
     return figures
 
+#plots data based on continent
 def plot_by_continent(df):
     return plot_by_location(df, "continent")
 
+#creates table to display data based on country
+def table_by_country(df, title=None, rows_per_page=28):
+    return table_pages_by_location(df, "country", title=title, rows_per_page=rows_per_page)
+
+def table_by_country_location_summary(df, title=None, rows_per_page=28):
+    table_df = df[["location", "job_title", "experience_level", "job_count", "avg_salary"]].copy()
+    table_df.columns = ["Location", "Job Title", "Experience", "Job Count", "Avg Salary"]
+    table_df["Avg Salary"] = table_df["Avg Salary"].round(2)
+
+    figures = []
+    total_pages = (len(table_df) + rows_per_page - 1) // rows_per_page
+
+    for page_idx in range(total_pages):
+        start = page_idx * rows_per_page
+        end = start + rows_per_page
+        page_df = table_df.iloc[start:end]
+
+        fig, ax = plt.subplots(figsize=(11.69, 8.27))
+        ax.axis("off")
+
+        page_title = title or "Job Summary by Location"
+        if total_pages > 1:
+            page_title = f"{page_title} (Page {page_idx + 1}/{total_pages})"
+
+        ax.set_title(page_title, fontsize=13, y=0.98)
+
+        n_rows = len(page_df)
+        table_height = min(0.82, max(0.18, 0.06 + n_rows * 0.03))
+        top_margin = 0.12
+        bottom_margin = 0.06
+        y0 = bottom_margin + ((1 - top_margin - bottom_margin) - table_height) / 2
+
+        table = ax.table(
+            cellText=page_df.values,
+            colLabels=page_df.columns,
+            cellLoc="center",
+            colLoc="center",
+            bbox=[0.03, y0, 0.94, table_height],
+        )
+
+        table.auto_set_font_size(False)
+        table.set_fontsize(8)
+        table.scale(1, 1.0)
+
+        figures.append(fig)
+
+    return figures

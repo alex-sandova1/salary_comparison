@@ -118,3 +118,7 @@ def highest_paying_job_by_location(df, location_col="location", job_col="job_tit
     idx = work.groupby(location_col)[salary_col].idxmax()
     result = work.loc[idx].reset_index(drop=True)
     return result
+
+def job_summary_by_location_in_country(conn, country):
+    sql_template = get_query_by_label("queries.sql", "job summary by location in country")
+    return pd.read_sql_query(sql_template, conn, params=[country])
