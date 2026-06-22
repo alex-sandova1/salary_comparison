@@ -7,5 +7,19 @@
         "*test.py"
     ],
     "python.testing.pytestEnabled": false,
-    "python.testing.unittestEnabled": true
+    "python.testing.unittestEnabled": true,
+    "chat.tools.terminal.autoApprove": {
+        "/^source \\.venv/bin/activate && python gui\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^source \\.venv/bin/activate && python - <<'PY'\nimport os\nos\\.environ\\['TK_SILENCE_DEPRECATION'\\]='1'\nimport tkinter as tk\nfrom tkinter import ttk\nroot=tk\\.Tk\\(\\)\nroot\\.geometry\\('400x200'\\)\nfrm=ttk\\.Frame\\(root, padding=10\\)\nfrm\\.pack\\(fill='both', expand=True\\)\nttk\\.Label\\(frm, text='Tk render test'\\)\\.pack\\(\\)\nroot\\.update_idletasks\\(\\)\nroot\\.update\\(\\)\nprint\\('ok', root\\.winfo_width\\(\\), root\\.winfo_height\\(\\)\\)\nroot\\.destroy\\(\\)\nPY$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^source \\.venv/bin/activate && python -m py_compile gui\\.py$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
 }
