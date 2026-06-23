@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
+from matplotlib.figure import Figure
+import pandas as pd
 
 #plots data based on location
 def plot_by_location(df, location):
@@ -118,3 +120,57 @@ def table_by_country_location_summary(df, title=None, rows_per_page=28):
         figures.append(fig)
 
     return figures
+
+
+def pie_graph(df, figsize=(4.2, 4.5), dpi=100):
+    fig = Figure(figsize=figsize, dpi=dpi)
+    ax = fig.add_subplot(111)
+
+    if df.empty:
+        ax.text(0.5, 0.5, "No data available", ha="center", va="center", fontsize=12)
+        ax.axis("off")
+        return fig
+    
+    values = df["job_count"].tolist()
+    labels = df["location"].tolist()
+
+    ax.pie(
+        values,
+        labels=labels,
+        autopct="%1.1f%%",
+        startangle=140,
+        wedgeprops={"linewidth": 1, "edgecolor": "white"},
+    )
+    ax.set_title("Job Count Distribution", fontsize=12)
+    fig.tight_layout()
+    return fig
+
+
+def get_salary_stats(df, conn=None):
+    """
+    Extract salary statistics from a dataframe.
+    Returns dict with: avg_salary, highest_pay (row), lowest_pay (row)
+    """
+    if df.empty or "salary" not in df.columns:
+        return {"avg_salary": 0, "highest_pay": None, "lowest_pay": None}
+
+    # Convert salary to numeric
+    df_copy = df.copy()
+    df_copy["salary"] = pd.to_numeric(df_copy["salary"], errors="coerce")
+    df_copy = df_copy.dropna(subset=["salary"])
+
+    if df_copy.empty:
+        return {"avg_salary": 0, "highest_pay": None, "lowest_pay": None}
+
+    avg_salary = df_copy["salary"].mean()
+    highest_idx = df_copy["salary"].idxmax()
+    lowest_idx = df_copy["salary"].idxmin()
+
+    highest_pay = df_copy.loc[highest_idx].to_dict()
+    lowest_pay = df_copy.loc[lowest_idx].to_dict()
+
+    return {
+        "avg_salary": avg_salary,
+        "highest_pay": highest_pay,
+        "lowest_pay": lowest_pay,
+    }

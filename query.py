@@ -122,3 +122,13 @@ def highest_paying_job_by_location(df, location_col="location", job_col="job_tit
 def job_summary_by_location_in_country(conn, country):
     sql_template = get_query_by_label("queries.sql", "job summary by location in country")
     return pd.read_sql_query(sql_template, conn, params=[country])
+
+# Get individual salary records for a continent (for stats calculation)
+def get_salaries_by_continent(conn, continent):
+    sql_template = get_query_by_label("queries.sql", "get salary by continent")
+    return pd.read_sql_query(sql_template, conn, params=[continent])
+
+# Get individual salary records for a country (for stats calculation)
+def get_salaries_by_country(conn, country):
+    sql_template = get_query_by_label("queries.sql", "get salary by country")
+    return pd.read_sql_query(sql_template, conn, params=[country])

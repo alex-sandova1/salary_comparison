@@ -54,7 +54,7 @@ SELECT
   job_title,
   experience_level,
   COUNT(*) AS job_count,
-  AVG(salary) AS avg_salary
+  Round (AVG(salary),2) AS avg_salary
 FROM salaries
 WHERE country = ?
   AND country IS NOT NULL
@@ -64,3 +64,15 @@ WHERE country = ?
   AND salary IS NOT NULL
 GROUP BY location, job_title, experience_level
 ORDER BY location, job_title, experience_level;
+
+--get salary by continent
+SELECT country, location, job_title, experience_level, salary
+FROM salaries
+WHERE continent = ? AND salary IS NOT NULL
+ORDER BY salary DESC
+
+--get salary by country
+    SELECT location, job_title, experience_level, salary
+    FROM salaries
+    WHERE country = ? AND salary IS NOT NULL
+    ORDER BY salary DESC

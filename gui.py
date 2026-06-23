@@ -4,8 +4,10 @@ os.environ["TK_SILENCE_DEPRECATION"] = "1"
 import sqlite3
 import tkinter as tk
 from tkinter import ttk, messagebox
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 from query import *
+from utils import *
 
 DB_PATH = "salaries.db"
 
@@ -37,6 +39,7 @@ class SalaryApp(tk.Tk):
         self.conn = connect_existing_database()
         self.current_continent = None
         self.current_countries = []
+        self.pie_host = None
 
         self._configure_style()
 
@@ -67,6 +70,25 @@ class SalaryApp(tk.Tk):
         for child in self.container.winfo_children():
             child.pack_forget()
 
+    def _build_home_view(self):
+        top = ttk.Frame(self.home_frame)
+        top.pack(fill=tk.X, pady=(0, 10))
+
+        self.home_title_var = tk.StringVar(value="Choose a Continent")
+        ttk.Label(
+            top,
+            textvariable=self.home_title_var,
+            font=("TkDefaultFont", 14, "bold")
+        ).pack(side=tk.LEFT)
+
+        ttk.Button(top, text="Refresh", command=self.refresh_continent_buttons).pack(side=tk.RIGHT)
+
+        self.home_buttons_frame = ttk.Frame(self.home_frame)
+        self.home_buttons_frame.pack(fill=tk.BOTH, expand=True)
+
+        self.home_status_var = tk.StringVar(value="")
+        ttk.Label(self.home_frame, textvariable=self.home_status_var).pack(anchor="w", pady=(8, 0))
+
     def show_home(self):
         self._clear_container()
         self.home_frame.pack(fill=tk.BOTH, expand=True)
@@ -89,30 +111,52 @@ class SalaryApp(tk.Tk):
         self._clear_container()
         self.continent_frame.pack(fill=tk.BOTH, expand=True)
 
-    def show_data_page(self, title, dataframe):
+    def show_data_page(self, title, dataframe, pie_df=None, pie_title=None, stats_df=None):
         self.data_title_var.set(title)
         self._render_table(dataframe)
+        self._render_pie(pie_df=pie_df, pie_title=pie_title)
+        # Use stats_df if provided, otherwise fall back to main dataframe
+        self._render_stats(stats_df if stats_df is not None else dataframe)
 
         self._clear_container()
         self.data_frame.pack(fill=tk.BOTH, expand=True)
 
-    def _build_home_view(self):
-        header = ttk.Frame(self.home_frame)
-        header.pack(fill=tk.X, pady=(0, 8))
-
-        ttk.Label(
-            header,
-            text="Choose a Continent",
-            font=("TkDefaultFont", 14, "bold")
-        ).pack(side=tk.LEFT)
-
-        ttk.Button(header, text="Refresh", command=self.refresh_continent_buttons).pack(side=tk.RIGHT)
-
-        self.home_buttons_frame = ttk.Frame(self.home_frame)
-        self.home_buttons_frame.pack(fill=tk.BOTH, expand=True)
-
-        self.home_status_var = tk.StringVar(value="")
-        ttk.Label(self.home_frame, textvariable=self.home_status_var).pack(anchor="w", pady=(8, 0))
+    def _build_data_view(self):
+        top = ttk.Frame(self.data_frame)
+        top.pack(fill=tk.X, pady=(0, 10))
+    
+        self.data_title_var = tk.StringVar(value="Results")
+        ttk.Label(top, textvariable=self.data_title_var, font=("TkDefaultFont", 12, "bold")).pack(side=tk.LEFT)
+        ttk.Button(top, text="Back", command=self.back_from_data).pack(side=tk.RIGHT)
+    
+        # Main content: table and chart
+        content = ttk.Frame(self.data_frame)
+        content.pack(fill=tk.BOTH, expand=True, pady=(0, 10))
+        content.rowconfigure(0, weight=1)
+        content.columnconfigure(0, weight=3)
+        content.columnconfigure(1, weight=2)
+    
+        # Left: table
+        table_wrap = ttk.Frame(content)
+        table_wrap.grid(row=0, column=0, sticky="nsew", padx=(0, 8))
+        table_wrap.rowconfigure(0, weight=1)
+        table_wrap.columnconfigure(0, weight=1)
+    
+        self.tree = ttk.Treeview(table_wrap, show="headings")
+        yscroll = ttk.Scrollbar(table_wrap, orient=tk.VERTICAL, command=self.tree.yview)
+        xscroll = ttk.Scrollbar(table_wrap, orient=tk.HORIZONTAL, command=self.tree.xview)
+        self.tree.configure(yscrollcommand=yscroll.set, xscrollcommand=xscroll.set)
+        self.tree.grid(row=0, column=0, sticky="nsew")
+        yscroll.grid(row=0, column=1, sticky="ns")
+        xscroll.grid(row=1, column=0, sticky="ew")
+    
+        # Right: pie chart
+        self.pie_host = ttk.Frame(content)
+        self.pie_host.grid(row=0, column=1, sticky="nsew")
+        
+        # Bottom: salary stats panel
+        self.stats_frame = ttk.LabelFrame(self.data_frame, text="Salary Summary", padding=10)
+        self.stats_frame.pack(fill=tk.X, padx=0, pady=(0, 0))
 
     def refresh_continent_buttons(self):
         for child in self.home_buttons_frame.winfo_children():
@@ -199,9 +243,13 @@ class SalaryApp(tk.Tk):
             return
         try:
             df = count_jobs_by_country_in_continent(self.conn, self.current_continent)
+            stats_df = get_salaries_by_continent(self.conn, self.current_continent)
             self.show_data_page(
                 f"Overall - {self.current_continent} (Country Job Counts)",
-                df
+                df,
+                pie_df=df,
+                pie_title=f"{self.current_continent}: Country Distribution",
+                stats_df=stats_df
             )
         except Exception as ex:
             messagebox.showerror("Query Error", str(ex))
@@ -214,41 +262,14 @@ class SalaryApp(tk.Tk):
 
         try:
             df = job_summary_by_location_in_country(self.conn, country)
+            stats_df = get_salaries_by_country(self.conn, country)
             self.show_data_page(
                 f"{country} - Location/Role/Experience Summary",
-                df
+                df,
+                stats_df=stats_df
             )
         except Exception as ex:
             messagebox.showerror("Query Error", str(ex))
-
-    def _build_data_view(self):
-        top = ttk.Frame(self.data_frame)
-        top.pack(fill=tk.X, pady=(0, 10))
-
-        self.data_title_var = tk.StringVar(value="Results")
-        ttk.Label(
-            top,
-            textvariable=self.data_title_var,
-            font=("TkDefaultFont", 12, "bold")
-        ).pack(side=tk.LEFT)
-
-        ttk.Button(top, text="Back", command=self.back_from_data).pack(side=tk.RIGHT)
-
-        table_wrap = ttk.Frame(self.data_frame)
-        table_wrap.pack(fill=tk.BOTH, expand=True)
-
-        self.tree = ttk.Treeview(table_wrap, show="headings")
-        yscroll = ttk.Scrollbar(table_wrap, orient=tk.VERTICAL, command=self.tree.yview)
-        xscroll = ttk.Scrollbar(table_wrap, orient=tk.HORIZONTAL, command=self.tree.xview)
-
-        self.tree.configure(yscrollcommand=yscroll.set, xscrollcommand=xscroll.set)
-
-        self.tree.grid(row=0, column=0, sticky="nsew")
-        yscroll.grid(row=0, column=1, sticky="ns")
-        xscroll.grid(row=1, column=0, sticky="ew")
-
-        table_wrap.rowconfigure(0, weight=1)
-        table_wrap.columnconfigure(0, weight=1)
 
     def back_from_data(self):
         if self.current_continent:
@@ -277,6 +298,98 @@ class SalaryApp(tk.Tk):
 
         for row in df.itertuples(index=False):
             self.tree.insert("", tk.END, values=list(row))
+    
+    def _render_pie(self, pie_df=None, pie_title=None):
+        if self.pie_host is None:
+            return
+
+        for child in self.pie_host.winfo_children():
+            child.destroy()
+
+        if pie_df is None or pie_df.empty:
+            ttk.Label(
+                self.pie_host,
+                text="Pie chart is shown for Overall view.",
+                justify=tk.CENTER,
+            ).pack(expand=True)
+            return
+
+        if "location" not in pie_df.columns or "job_count" not in pie_df.columns:
+            ttk.Label(
+                self.pie_host,
+                text="No pie data available for this view.",
+                justify=tk.CENTER,
+            ).pack(expand=True)
+            return
+
+        try:
+            fig = pie_graph(pie_df)
+            if pie_title:
+                fig.axes[0].set_title(pie_title)
+            canvas = FigureCanvasTkAgg(fig, master=self.pie_host)
+            canvas.draw()
+            canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+        except Exception as ex:
+            messagebox.showerror("Pie Chart Error", str(ex))
+    
+    def _render_stats(self, df):
+        if not hasattr(self, 'stats_frame'):
+            return
+        
+        for child in self.stats_frame.winfo_children():
+            child.destroy()
+        
+        try:
+            stats = get_salary_stats(df)
+            avg = stats.get("avg_salary", 0)
+            highest = stats.get("highest_pay")
+            lowest = stats.get("lowest_pay")
+            
+            # Create three columns for the stats
+            cols = ttk.Frame(self.stats_frame)
+            cols.pack(fill=tk.X)
+            
+            # Average salary
+            avg_frame = ttk.Frame(cols)
+            avg_frame.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 20))
+            ttk.Label(avg_frame, text="Average Salary", font=("TkDefaultFont", 10, "bold")).pack()
+            ttk.Label(avg_frame, text=f"${avg:,.2f}" if avg else "N/A", font=("TkDefaultFont", 11)).pack()
+            
+            # Highest salary
+            high_frame = ttk.Frame(cols)
+            high_frame.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 20))
+            ttk.Label(high_frame, text="Highest Salary", font=("TkDefaultFont", 10, "bold")).pack()
+            if highest:
+                salary = highest.get("salary", "N/A")
+                title = highest.get("job_title", "")
+                exp = highest.get("experience_level", "")
+                # Show location context (country for continent view, location for country view)
+                context = highest.get("country") or highest.get("location", "")
+                detail_parts = [p for p in [context, title, exp] if p]
+                detail = " | ".join(detail_parts)
+                ttk.Label(high_frame, text=f"${salary:,.2f}" if salary else "N/A").pack()
+                ttk.Label(high_frame, text=detail, font=("TkDefaultFont", 9), justify=tk.LEFT, wraplength=200).pack()
+            else:
+                ttk.Label(high_frame, text="N/A").pack()
+            
+            # Lowest salary
+            low_frame = ttk.Frame(cols)
+            low_frame.pack(side=tk.LEFT, fill=tk.X, expand=True)
+            ttk.Label(low_frame, text="Lowest Salary", font=("TkDefaultFont", 10, "bold")).pack()
+            if lowest:
+                salary = lowest.get("salary", "N/A")
+                title = lowest.get("job_title", "")
+                exp = lowest.get("experience_level", "")
+                # Show location context (country for continent view, location for country view)
+                context = lowest.get("country") or lowest.get("location", "")
+                detail_parts = [p for p in [context, title, exp] if p]
+                detail = " | ".join(detail_parts)
+                ttk.Label(low_frame, text=f"${salary:,.2f}" if salary else "N/A").pack()
+                ttk.Label(low_frame, text=detail, font=("TkDefaultFont", 9), justify=tk.LEFT, wraplength=200).pack()
+            else:
+                ttk.Label(low_frame, text="N/A").pack()
+        except Exception as ex:
+            ttk.Label(self.stats_frame, text=f"Error loading stats: {ex}").pack()
 
     def on_close(self):
         try:
@@ -292,5 +405,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
     main()
