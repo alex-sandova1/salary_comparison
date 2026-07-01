@@ -1,70 +1,78 @@
 # Salary Comparison Portfolio Project
 
-An end-to-end data storytelling project that transforms raw salary records into a clean, stakeholder-friendly PDF report.
+End-to-end salary analysis project built with pandas, SQLite, matplotlib, and Tkinter.
 
-This project demonstrates a practical analytics workflow: data cleaning, SQL modeling, query-driven analysis, and visual report generation using Python.
+The project loads data science salary records, removes duplicates, writes cleaned data to SQLite, and provides two ways to explore insights:
 
-## Project Snapshot
+- A generated multi-page PDF report
+- A desktop GUI for interactive drill-down by continent and country
 
-- Goal: surface global hiring and compensation patterns in data science roles.
-- Input: `datascience_salaries.csv`.
-- Processing stack: pandas + SQLite.
-- Output: `salary_report.pdf` with chart and paginated insight tables.
+## Project Goals
 
-## Why This Project Matters
+This workflow is designed to answer practical questions such as:
 
-Instead of stopping at notebook exploration, this project packages analysis into a repeatable reporting pipeline. It is built to answer real-world questions like:
+- Which continents have the largest concentration of roles?
+- How does job volume vary by country inside each continent?
+- Inside a selected country, how do location, role, and experience level relate to average salary?
 
-- Which continents have the highest concentration of data roles?
-- How do job counts vary by country within each continent?
-- Within each country, how do location, role title, and experience level relate to average salary?
+## Data Flow
 
-## What The Pipeline Produces
+1. Read raw CSV from `datascience_salaries.csv`
+2. Remove duplicate rows
+3. Replace the `salaries` table in `salaries.db`
+4. Run labeled SQL queries from `queries.sql`
+5. Render outputs as PDF pages and/or interactive GUI tables/charts
 
-Running the project generates a report with:
+## Outputs
 
-- A bar chart of job count by continent.
-- Paginated country tables for each continent (job count by country).
-- Paginated location summaries for each country, including:
+Running `start.py` generates:
+
+- `salaries.db`
+- `salary_report.pdf`
+
+The report includes:
+
+- Bar chart: job count by continent
+- Country tables by continent (paginated)
+- Country-level summary tables (paginated) with:
   - location
   - job title
   - experience level
   - job count
   - average salary
 
-To prevent partial outputs, report pages are written to a temporary file and moved into place only after successful completion.
+The PDF is written to a temporary file first and then atomically replaced, preventing partial/corrupted report files if generation fails.
 
-## Technical Highlights
+## Interactive GUI
 
-- Data quality step: duplicate record removal before persistence.
-- SQL abstraction: labeled query blocks loaded dynamically from `queries.sql`.
-- Reproducible storage: SQLite table refresh on each run.
-- Automated document generation: matplotlib figures exported to a multi-page PDF.
-- Scalable presentation: long tables are paginated for readability.
+`gui.py` provides a Tkinter app that reads from `salaries.db` and supports:
 
-## Architecture
+- Home screen with continent buttons
+- Continent view:
+  - Overall job-count table by country
+  - Country selector for detailed drill-down
+- Data view:
+  - Table results
+  - Pie chart for overall country distribution
+  - Salary summary cards (average, highest, lowest)
 
-- `start.py` orchestrates the full workflow (CSV -> SQLite -> PDF).
-- `query.py` handles SQL loading plus data retrieval/transformation helpers.
-- `utils.py` builds chart and table figures for the report.
-- `queries.sql` stores reusable labeled SQL statements.
-- `tests.py` provides manual exploratory checks for selected functions.
+Important: run `start.py` at least once before starting the GUI so `salaries.db` and the `salaries` table exist.
 
-## Skills Demonstrated
+## File Overview
 
-- Data cleaning and preparation with pandas
-- Relational querying with SQLite
-- Analytical aggregation by geography and role metadata
-- Programmatic report generation with matplotlib
-- Scripted, repeatable analytics delivery
+- `start.py`: Pipeline entry point (CSV -> SQLite -> PDF)
+- `gui.py`: Interactive Tkinter desktop interface
+- `query.py`: SQL loader and query helper functions
+- `queries.sql`: Labeled SQL statements used by query helpers
+- `utils.py`: Plotting, paginated table rendering, pie chart, salary stats helpers
+- `tests.py`: Manual script for exploratory spot checks
+- `Reference/`: Extra location reference CSV files
 
-## Run Locally
+## Setup
 
 Requirements:
 
 - Python 3.10+
-- pandas
-- matplotlib
 
 Install dependencies:
 
@@ -72,17 +80,34 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-Run from the project root:
+## Usage
+
+Generate database and PDF report:
 
 ```bash
 python start.py
 ```
 
-Generated artifacts:
+Run the GUI app:
 
-- `salaries.db`
-- `salary_report.pdf`
+```bash
+python gui.py
+```
 
-## Current Testing State
+Optional manual checks:
 
-`tests.py` is currently a manual script for spot-checking query outputs and table rendering. Converting this to an automated test suite is a planned improvement.
+```bash
+python tests.py
+```
+
+## Current Limitations
+
+- `tests.py` is not an automated unit/integration test suite yet.
+- SQL query lookup is based on label matching in comments, so label naming consistency in `queries.sql` is important.
+
+## Tech Stack
+
+- pandas
+- sqlite3
+- matplotlib
+- tkinter
