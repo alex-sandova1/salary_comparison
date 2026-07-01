@@ -13,9 +13,10 @@ DB_PATH = "salaries.db"
 
 
 def connect_existing_database():
+    """Connect to the salary database and verify the salaries table exists."""
     if not os.path.exists(DB_PATH):
         raise FileNotFoundError(
-            "salaries.db was not found. Run [start.py](http://_vscodecontentref_/1) first to build the database."
+            "salaries.db was not found. Run start.py first to build the database."
         )
 
     conn = sqlite3.connect(DB_PATH)
@@ -24,18 +25,22 @@ def connect_existing_database():
     except sqlite3.Error as ex:
         conn.close()
         raise RuntimeError(
-            "salaries table is missing. Run [start.py](http://_vscodecontentref_/2) first to rebuild salaries.db."
+            "salaries table is missing. Run start.py first to rebuild salaries.db."
         ) from ex
     return conn
 
 
 class SalaryApp(tk.Tk):
+    """Main GUI application for salary data exploration. """
+    
     def __init__(self):
+        """Initialize the Salary Analysis application and set up the GUI."""
         super().__init__()
         self.title("Salary Analysis Report")
         self.geometry("900x620")
         self.minsize(760, 500)
 
+        # Database connection and state tracking
         self.conn = connect_existing_database()
         self.current_continent = None
         self.current_countries = []
@@ -59,6 +64,7 @@ class SalaryApp(tk.Tk):
         self.protocol("WM_DELETE_WINDOW", self.on_close)
 
     def _configure_style(self):
+        """Configure the tkinter theme to use 'clam' if available, else 'default'."""
         style = ttk.Style(self)
         themes = style.theme_names()
         if "clam" in themes:
@@ -67,13 +73,16 @@ class SalaryApp(tk.Tk):
             style.theme_use("default")
 
     def _clear_container(self):
+        """Clear all widgets from the main container frame."""
         for child in self.container.winfo_children():
             child.pack_forget()
 
     def _build_home_view(self):
+        """Build the home view with continent selection buttons and refresh control."""
         top = ttk.Frame(self.home_frame)
         top.pack(fill=tk.X, pady=(0, 10))
 
+        # Title label
         self.home_title_var = tk.StringVar(value="Choose a Continent")
         ttk.Label(
             top,
@@ -81,23 +90,29 @@ class SalaryApp(tk.Tk):
             font=("TkDefaultFont", 14, "bold")
         ).pack(side=tk.LEFT)
 
+        # Refresh button to reload continents
         ttk.Button(top, text="Refresh", command=self.refresh_continent_buttons).pack(side=tk.RIGHT)
 
+        # Container for continent buttons
         self.home_buttons_frame = ttk.Frame(self.home_frame)
         self.home_buttons_frame.pack(fill=tk.BOTH, expand=True)
 
+        # Status label showing count of loaded continents
         self.home_status_var = tk.StringVar(value="")
         ttk.Label(self.home_frame, textvariable=self.home_status_var).pack(anchor="w", pady=(8, 0))
 
     def show_home(self):
+        """Display the home view with continent selection."""
         self._clear_container()
         self.home_frame.pack(fill=tk.BOTH, expand=True)
         self.refresh_continent_buttons()
 
     def show_continent_page(self, continent):
+        """Display the continent view with country selection options."""
         self.current_continent = continent
         self.continent_title_var.set(f"Continent: {continent}")
 
+        # Load countries within this continent
         try:
             countries_df = count_jobs_by_country_in_continent(self.conn, continent)
             self.current_countries = countries_df["location"].dropna().tolist()
@@ -105,6 +120,7 @@ class SalaryApp(tk.Tk):
             messagebox.showerror("Load Error", str(ex))
             self.current_countries = []
 
+        # Populate country dropdown
         self.country_combo["values"] = self.current_countries
         self.country_var.set(self.current_countries[0] if self.current_countries else "")
 
@@ -112,6 +128,7 @@ class SalaryApp(tk.Tk):
         self.continent_frame.pack(fill=tk.BOTH, expand=True)
 
     def show_data_page(self, title, dataframe, pie_df=None, pie_title=None, stats_df=None):
+        """Display the data view with a table, optional pie chart, and salary statistics. """
         self.data_title_var.set(title)
         self._render_table(dataframe)
         self._render_pie(pie_df=pie_df, pie_title=pie_title)
@@ -122,6 +139,8 @@ class SalaryApp(tk.Tk):
         self.data_frame.pack(fill=tk.BOTH, expand=True)
 
     def _build_data_view(self):
+        """Build the data view with table, pie chart, and salary statistics."""
+        # Top bar with title and back button
         top = ttk.Frame(self.data_frame)
         top.pack(fill=tk.X, pady=(0, 10))
     
@@ -129,14 +148,14 @@ class SalaryApp(tk.Tk):
         ttk.Label(top, textvariable=self.data_title_var, font=("TkDefaultFont", 12, "bold")).pack(side=tk.LEFT)
         ttk.Button(top, text="Back", command=self.back_from_data).pack(side=tk.RIGHT)
     
-        # Main content: table and chart
+        # Main content: table on left (3/4 width), pie chart on right (1/4 width)
         content = ttk.Frame(self.data_frame)
         content.pack(fill=tk.BOTH, expand=True, pady=(0, 10))
         content.rowconfigure(0, weight=1)
         content.columnconfigure(0, weight=3)
         content.columnconfigure(1, weight=2)
     
-        # Left: table
+        # Left side: scrollable table with data
         table_wrap = ttk.Frame(content)
         table_wrap.grid(row=0, column=0, sticky="nsew", padx=(0, 8))
         table_wrap.rowconfigure(0, weight=1)
@@ -150,18 +169,21 @@ class SalaryApp(tk.Tk):
         yscroll.grid(row=0, column=1, sticky="ns")
         xscroll.grid(row=1, column=0, sticky="ew")
     
-        # Right: pie chart
+        # Right side: pie chart container
         self.pie_host = ttk.Frame(content)
         self.pie_host.grid(row=0, column=1, sticky="nsew")
         
-        # Bottom: salary stats panel
+        # Bottom: salary statistics summary panel
         self.stats_frame = ttk.LabelFrame(self.data_frame, text="Salary Summary", padding=10)
         self.stats_frame.pack(fill=tk.X, padx=0, pady=(0, 0))
 
     def refresh_continent_buttons(self):
+        """Reload continent buttons from the database in a 3-column grid layout."""
+        # Clear existing buttons
         for child in self.home_buttons_frame.winfo_children():
             child.destroy()
 
+        # Fetch continents from database
         try:
             continents_df = get_continents(self.conn)
             continents = continents_df["continent"].dropna().tolist()
@@ -169,11 +191,13 @@ class SalaryApp(tk.Tk):
             messagebox.showerror("Load Error", str(ex))
             continents = []
 
+        # Handle empty result
         if not continents:
             ttk.Label(self.home_buttons_frame, text="No continents found").pack(anchor="w", pady=6)
             self.home_status_var.set("No continents loaded")
             return
 
+        # Create buttons in a 3-column grid
         cols = 3
         for i, continent in enumerate(continents):
             row = i // cols
@@ -193,6 +217,8 @@ class SalaryApp(tk.Tk):
         self.home_status_var.set(f"Loaded {len(continents)} continents")
 
     def _build_continent_view(self):
+        """Build the continent view with country selection and action buttons."""
+        # Top bar with continent title and back button
         top = ttk.Frame(self.continent_frame)
         top.pack(fill=tk.X, pady=(0, 10))
 
@@ -205,6 +231,7 @@ class SalaryApp(tk.Tk):
 
         ttk.Button(top, text="Back", command=self.show_home).pack(side=tk.RIGHT)
 
+        # Action card with buttons and country selection
         card = ttk.Frame(self.continent_frame, padding=10)
         card.pack(fill=tk.X, pady=(0, 8))
 
@@ -212,6 +239,7 @@ class SalaryApp(tk.Tk):
             row=0, column=0, columnspan=3, sticky="w", pady=(0, 8)
         )
 
+        # Button: Show overall statistics for the continent
         ttk.Button(
             card,
             text="Overall (All Countries in this Continent)",
@@ -219,6 +247,7 @@ class SalaryApp(tk.Tk):
             width=42
         ).grid(row=1, column=0, sticky="w", padx=(0, 10))
 
+        # Country selection dropdown
         self.country_var = tk.StringVar(value="")
         self.country_combo = ttk.Combobox(
             card,
@@ -228,10 +257,12 @@ class SalaryApp(tk.Tk):
         )
         self.country_combo.grid(row=1, column=1, sticky="w", padx=(0, 8))
 
+        # Button: Open detailed view for selected country
         ttk.Button(card, text="Open Country", command=self.on_open_country).grid(
             row=1, column=2, sticky="w"
         )
 
+        # Help text explaining the two options
         info = (
             "Overall shows job count by country for this continent.\n"
             "Open Country shows location/title/experience summary for the selected country."
@@ -239,10 +270,13 @@ class SalaryApp(tk.Tk):
         ttk.Label(self.continent_frame, text=info, justify=tk.LEFT).pack(anchor="w", pady=(4, 0))
 
     def on_show_overall(self):
+        """Load and display overall job count by country for the current continent."""
         if not self.current_continent:
             return
         try:
+            # Fetch job counts grouped by country
             df = count_jobs_by_country_in_continent(self.conn, self.current_continent)
+            # Fetch individual salary records for statistics
             stats_df = get_salaries_by_continent(self.conn, self.current_continent)
             self.show_data_page(
                 f"Overall - {self.current_continent} (Country Job Counts)",
@@ -255,13 +289,16 @@ class SalaryApp(tk.Tk):
             messagebox.showerror("Query Error", str(ex))
 
     def on_open_country(self):
+        """Load and display job summary by location, role, and experience for the selected country."""
         country = self.country_var.get().strip()
         if not country:
             messagebox.showwarning("Selection Required", "Pick a country first.")
             return
 
         try:
+            # Fetch detailed job summary for the country
             df = job_summary_by_location_in_country(self.conn, country)
+            # Fetch individual salary records for statistics
             stats_df = get_salaries_by_country(self.conn, country)
             self.show_data_page(
                 f"{country} - Location/Role/Experience Summary",
@@ -272,15 +309,23 @@ class SalaryApp(tk.Tk):
             messagebox.showerror("Query Error", str(ex))
 
     def back_from_data(self):
+        """Return from data view to continent page or home depending on navigation state."""
         if self.current_continent:
             self.show_continent_page(self.current_continent)
         else:
             self.show_home()
 
     def _render_table(self, df):
+        """Populate the table widget with data from a DataFrame.
+        
+        Args:
+            df (pd.DataFrame): DataFrame to display. If empty, shows a message.
+        """
+        # Clear existing rows
         self.tree.delete(*self.tree.get_children())
         self.tree["columns"] = ()
 
+        # Handle empty dataframe
         if df is None or df.empty:
             self.tree["columns"] = ("message",)
             self.tree.heading("message", text="Message")
@@ -288,6 +333,7 @@ class SalaryApp(tk.Tk):
             self.tree.insert("", tk.END, values=("No data found for this selection.",))
             return
 
+        # Configure columns
         cols = list(df.columns)
         self.tree["columns"] = cols
 
@@ -296,16 +342,20 @@ class SalaryApp(tk.Tk):
             width = 160 if col not in {"job_title"} else 240
             self.tree.column(col, width=width, anchor="center")
 
+        # Populate rows from dataframe
         for row in df.itertuples(index=False):
             self.tree.insert("", tk.END, values=list(row))
     
     def _render_pie(self, pie_df=None, pie_title=None):
+        """Render a pie chart showing job distribution by location."""
         if self.pie_host is None:
             return
 
+        # Clear previous chart
         for child in self.pie_host.winfo_children():
             child.destroy()
 
+        # Handle missing data
         if pie_df is None or pie_df.empty:
             ttk.Label(
                 self.pie_host,
@@ -314,6 +364,7 @@ class SalaryApp(tk.Tk):
             ).pack(expand=True)
             return
 
+        # Validate required columns
         if "location" not in pie_df.columns or "job_count" not in pie_df.columns:
             ttk.Label(
                 self.pie_host,
@@ -322,6 +373,7 @@ class SalaryApp(tk.Tk):
             ).pack(expand=True)
             return
 
+        # Generate and display pie chart
         try:
             fig = pie_graph(pie_df)
             if pie_title:
@@ -333,29 +385,33 @@ class SalaryApp(tk.Tk):
             messagebox.showerror("Pie Chart Error", str(ex))
     
     def _render_stats(self, df):
+        """Display salary statistics (average, highest, lowest) in the stats panel."""
+
         if not hasattr(self, 'stats_frame'):
             return
         
+        # Clear previous stats
         for child in self.stats_frame.winfo_children():
             child.destroy()
         
         try:
+            # Calculate salary statistics
             stats = get_salary_stats(df)
             avg = stats.get("avg_salary", 0)
             highest = stats.get("highest_pay")
             lowest = stats.get("lowest_pay")
             
-            # Create three columns for the stats
+            # Create three columns for the stats display
             cols = ttk.Frame(self.stats_frame)
             cols.pack(fill=tk.X)
             
-            # Average salary
+            # Average salary column
             avg_frame = ttk.Frame(cols)
             avg_frame.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 20))
             ttk.Label(avg_frame, text="Average Salary", font=("TkDefaultFont", 10, "bold")).pack()
             ttk.Label(avg_frame, text=f"${avg:,.2f}" if avg else "N/A", font=("TkDefaultFont", 11)).pack()
             
-            # Highest salary
+            # Highest salary column with job context
             high_frame = ttk.Frame(cols)
             high_frame.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 20))
             ttk.Label(high_frame, text="Highest Salary", font=("TkDefaultFont", 10, "bold")).pack()
@@ -372,7 +428,7 @@ class SalaryApp(tk.Tk):
             else:
                 ttk.Label(high_frame, text="N/A").pack()
             
-            # Lowest salary
+            # Lowest salary column with job context
             low_frame = ttk.Frame(cols)
             low_frame.pack(side=tk.LEFT, fill=tk.X, expand=True)
             ttk.Label(low_frame, text="Lowest Salary", font=("TkDefaultFont", 10, "bold")).pack()
@@ -392,6 +448,7 @@ class SalaryApp(tk.Tk):
             ttk.Label(self.stats_frame, text=f"Error loading stats: {ex}").pack()
 
     def on_close(self):
+        """Clean up database connection and close the application."""
         try:
             if self.conn is not None:
                 self.conn.close()

@@ -3,8 +3,8 @@ from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib.figure import Figure
 import pandas as pd
 
-#plots data based on location
 def plot_by_location(df, location):
+    """Create a bar chart of job counts grouped by a location level."""
     location_label = location.strip().capitalize()
     fig, ax = plt.subplots(figsize=(10, 6))
     df.plot(kind='bar', x='location', y='job_count', legend=False, ax=ax)
@@ -13,16 +13,18 @@ def plot_by_location(df, location):
     ax.set_ylabel('Count')
     ax.tick_params(axis='x', rotation=45)
     
+    # Add value labels on top of bars
     for container in ax.containers:
         ax.bar_label(container, fmt='%.0f', padding=3)
         
+    # Set y-axis limit with 20% padding at top
     max_count = df["job_count"].max()
     ax.set_ylim(0, max_count * 1.2)
     fig.tight_layout()
     return fig
 
-#plots tables based on location
 def table_pages_by_location(df, location, title=None, rows_per_page=28):
+    """Create multi-page PDF table figures showing job counts by location."""
     location_label = location.strip().capitalize()
     table_df = df[["location", "job_count"]].copy()
     table_df.columns = [location_label, "Job Count"]
@@ -69,15 +71,17 @@ def table_pages_by_location(df, location, title=None, rows_per_page=28):
 
     return figures
 
-#plots data based on continent
 def plot_by_continent(df):
+    """Create a bar chart of job counts grouped by continent."""
     return plot_by_location(df, "continent")
 
-#creates table to display data based on country
 def table_by_country(df, title=None, rows_per_page=28):
+    """Create multi-page PDF table figures showing job counts by country."""
     return table_pages_by_location(df, "country", title=title, rows_per_page=rows_per_page)
 
 def table_by_country_location_summary(df, title=None, rows_per_page=28):
+    """Create multi-page PDF table figures showing detailed job summary by location within a country. """
+    # Select and rename columns for display
     table_df = df[["location", "job_title", "experience_level", "job_count", "avg_salary"]].copy()
     table_df.columns = ["Location", "Job Title", "Experience", "Job Count", "Avg Salary"]
     table_df["Avg Salary"] = table_df["Avg Salary"].round(2)
@@ -90,6 +94,7 @@ def table_by_country_location_summary(df, title=None, rows_per_page=28):
         end = start + rows_per_page
         page_df = table_df.iloc[start:end]
 
+        # Landscape A3 format for detailed summary with many columns
         fig, ax = plt.subplots(figsize=(11.69, 8.27))
         ax.axis("off")
 
@@ -99,6 +104,7 @@ def table_by_country_location_summary(df, title=None, rows_per_page=28):
 
         ax.set_title(page_title, fontsize=13, y=0.98)
 
+        # Adjust table height based on number of rows
         n_rows = len(page_df)
         table_height = min(0.82, max(0.18, 0.06 + n_rows * 0.03))
         top_margin = 0.12
@@ -123,21 +129,24 @@ def table_by_country_location_summary(df, title=None, rows_per_page=28):
 
 
 def pie_graph(df, figsize=(4.2, 4.5), dpi=100):
+    """Create a pie chart showing job distribution by location."""
     fig = Figure(figsize=figsize, dpi=dpi)
     ax = fig.add_subplot(111)
 
+    # Handle empty dataframe
     if df.empty:
         ax.text(0.5, 0.5, "No data available", ha="center", va="center", fontsize=12)
         ax.axis("off")
         return fig
     
+    # Extract data and create pie chart
     values = df["job_count"].tolist()
     labels = df["location"].tolist()
 
     ax.pie(
         values,
         labels=labels,
-        autopct="%1.1f%%",
+        autopct="%1.1f%%",  # Display percentage
         startangle=140,
         wedgeprops={"linewidth": 1, "edgecolor": "white"},
     )
@@ -147,21 +156,21 @@ def pie_graph(df, figsize=(4.2, 4.5), dpi=100):
 
 
 def get_salary_stats(df, conn=None):
-    """
-    Extract salary statistics from a dataframe.
-    Returns dict with: avg_salary, highest_pay (row), lowest_pay (row)
-    """
+    """Extract salary statistics from a dataframe."""
+    # Handle empty or missing salary data
     if df.empty or "salary" not in df.columns:
         return {"avg_salary": 0, "highest_pay": None, "lowest_pay": None}
 
-    # Convert salary to numeric
+    # Convert salary to numeric and remove missing values
     df_copy = df.copy()
     df_copy["salary"] = pd.to_numeric(df_copy["salary"], errors="coerce")
     df_copy = df_copy.dropna(subset=["salary"])
 
+    # Handle case where all salaries were invalid
     if df_copy.empty:
         return {"avg_salary": 0, "highest_pay": None, "lowest_pay": None}
 
+    # Calculate statistics
     avg_salary = df_copy["salary"].mean()
     highest_idx = df_copy["salary"].idxmax()
     lowest_idx = df_copy["salary"].idxmin()
