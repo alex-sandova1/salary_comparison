@@ -76,3 +76,18 @@ ORDER BY salary DESC
     FROM salaries
     WHERE country = ? AND salary IS NOT NULL
     ORDER BY salary DESC
+
+--remote jobs by country
+SELECT country AS location, COUNT(*) AS job_count
+FROM salaries
+WHERE LOWER(location) LIKE 'remote%'
+  AND country IS NOT NULL
+GROUP BY country
+ORDER BY job_count DESC, country;
+
+--get remote salaries
+SELECT country, location, job_title, experience_level, salary
+FROM salaries
+WHERE LOWER(location) LIKE 'remote%'
+  AND salary IS NOT NULL
+ORDER BY salary DESC;

@@ -1,14 +1,3 @@
-"""Salary Data Initialization and Report Generation
-
-Initializes the salary database from CSV data and generates a comprehensive
-PDF report with visualizations and summaries of job data by continent and country.
-
-When run as the main script, this module:
-1. Loads salary data from a CSV file
-2. Removes duplicate records
-3. Stores cleaned data in SQLite database
-4. Generates a multi-page PDF report with charts and tables
-"""
 import pandas as pd
 import sqlite3
 import os

@@ -128,10 +128,11 @@ def table_by_country_location_summary(df, title=None, rows_per_page=28):
     return figures
 
 
-def pie_graph(df, figsize=(4.2, 4.5), dpi=100):
+def pie_graph(df, figsize=(5.4, 4.5), dpi=100):
     """Create a pie chart showing job distribution by location."""
-    fig = Figure(figsize=figsize, dpi=dpi)
+    fig = Figure(figsize=figsize, dpi=dpi, facecolor="#FFFFFF")
     ax = fig.add_subplot(111)
+    ax.set_facecolor("#FFFFFF")
 
     # Handle empty dataframe
     if df.empty:
@@ -143,14 +144,34 @@ def pie_graph(df, figsize=(4.2, 4.5), dpi=100):
     values = df["job_count"].tolist()
     labels = df["location"].tolist()
 
-    ax.pie(
+    total = sum(values)
+
+    def percentage_label(pct):
+        """Avoid unreadable labels on the smallest pie slices."""
+        return f"{pct:.1f}%" if pct >= 4 else ""
+
+    wedges, _, _ = ax.pie(
         values,
-        labels=labels,
-        autopct="%1.1f%%",  # Display percentage
+        autopct=percentage_label,
         startangle=140,
+        colors=["#173F5F", "#E76F51", "#2A9D8F", "#E9C46A", "#6C8EAD", "#B56576", "#8AB17D"],
+        textprops={"color": "#243B53", "fontsize": 9, "weight": "bold"},
         wedgeprops={"linewidth": 1, "edgecolor": "white"},
+        pctdistance=0.70,
     )
-    ax.set_title("Job Count Distribution", fontsize=12)
+    legend_labels = [f"{label}  ({value / total:.1%})" for label, value in zip(labels, values)]
+    ax.legend(
+        wedges,
+        legend_labels,
+        title="Country",
+        loc="center left",
+        bbox_to_anchor=(1.02, 0.5),
+        frameon=False,
+        labelspacing=0.8,
+        fontsize=8,
+        title_fontsize=9,
+    )
+    ax.set_title("Job count distribution", fontsize=12, fontweight="bold", color="#243B53", pad=12)
     fig.tight_layout()
     return fig
 

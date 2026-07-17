@@ -36,9 +36,24 @@ class SalaryApp(tk.Tk):
     def __init__(self):
         """Initialize the Salary Analysis application and set up the GUI."""
         super().__init__()
-        self.title("Salary Analysis Report")
-        self.geometry("900x620")
-        self.minsize(760, 500)
+        self.title("Salary Atlas")
+        self.geometry("1040x700")
+        self.minsize(860, 580)
+        self.configure(bg="#F4F7FB")
+
+        self.colors = {
+            "navy": "#102A43",
+            "navy_light": "#173F5F",
+            "ink": "#243B53",
+            "muted": "#627D98",
+            "canvas": "#F4F7FB",
+            "card": "#FFFFFF",
+            "accent": "#E76F51",
+            "accent_hover": "#D85C3D",
+            "soft_accent": "#FFF0EC",
+            "line": "#D9E2EC",
+            "table_alt": "#F8FAFC",
+        }
 
         # Database connection and state tracking
         self.conn = connect_existing_database()
@@ -48,7 +63,8 @@ class SalaryApp(tk.Tk):
 
         self._configure_style()
 
-        self.container = ttk.Frame(self, padding=12)
+        self._build_header()
+        self.container = ttk.Frame(self, style="App.TFrame", padding=(28, 24, 28, 28))
         self.container.pack(fill=tk.BOTH, expand=True)
 
         self.home_frame = ttk.Frame(self.container)
@@ -64,13 +80,48 @@ class SalaryApp(tk.Tk):
         self.protocol("WM_DELETE_WINDOW", self.on_close)
 
     def _configure_style(self):
-        """Configure the tkinter theme to use 'clam' if available, else 'default'."""
+        """Set a clean, card-based visual language for the application."""
         style = ttk.Style(self)
         themes = style.theme_names()
         if "clam" in themes:
             style.theme_use("clam")
         elif "default" in themes:
             style.theme_use("default")
+
+        c = self.colors
+        style.configure("App.TFrame", background=c["canvas"])
+        style.configure("Card.TFrame", background=c["card"])
+        style.configure("Card.TLabelframe", background=c["card"], borderwidth=0, relief="flat")
+        style.configure(
+            "Card.TLabelframe.Label", background=c["card"], foreground=c["ink"],
+            font=("Helvetica", 11, "bold")
+        )
+        style.configure("Title.TLabel", background=c["canvas"], foreground=c["ink"], font=("Helvetica", 22, "bold"))
+        style.configure("PageTitle.TLabel", background=c["canvas"], foreground=c["ink"], font=("Helvetica", 17, "bold"))
+        style.configure("Subtitle.TLabel", background=c["canvas"], foreground=c["muted"], font=("Helvetica", 10))
+        style.configure("CardTitle.TLabel", background=c["card"], foreground=c["ink"], font=("Helvetica", 11, "bold"))
+        style.configure("CardText.TLabel", background=c["card"], foreground=c["muted"], font=("Helvetica", 10))
+        style.configure("Header.TFrame", background=c["navy"])
+        style.configure("HeaderBrand.TLabel", background=c["navy"], foreground="#FFFFFF", font=("Helvetica", 16, "bold"))
+        style.configure("HeaderText.TLabel", background=c["navy"], foreground="#BFD7EA", font=("Helvetica", 10))
+        style.configure("Accent.TButton", background=c["accent"], foreground="#FFFFFF", borderwidth=0, font=("Helvetica", 10, "bold"), padding=(14, 9))
+        style.map("Accent.TButton", background=[("active", c["accent_hover"]), ("pressed", c["accent_hover"])])
+        style.configure("Secondary.TButton", background=c["card"], foreground=c["navy_light"], borderwidth=0, font=("Helvetica", 10, "bold"), padding=(12, 8))
+        style.map("Secondary.TButton", background=[("active", c["soft_accent"]), ("pressed", c["soft_accent"])])
+        style.configure("Continent.TButton", background=c["card"], foreground=c["navy_light"], borderwidth=0, font=("Helvetica", 11, "bold"), padding=(12, 11), anchor="w")
+        style.map("Continent.TButton", background=[("active", c["soft_accent"]), ("pressed", c["soft_accent"])], foreground=[("active", c["accent"])])
+        style.configure("TCombobox", fieldbackground="#FFFFFF", background="#FFFFFF", foreground=c["ink"], padding=7)
+        style.configure("Treeview", background="#FFFFFF", fieldbackground="#FFFFFF", foreground=c["ink"], rowheight=32, borderwidth=0, font=("Helvetica", 10))
+        style.configure("Treeview.Heading", background=c["navy_light"], foreground="#FFFFFF", relief="flat", font=("Helvetica", 10, "bold"), padding=(10, 9))
+        style.map("Treeview", background=[("selected", "#D8EAF5")], foreground=[("selected", c["navy"])])
+        style.configure("TScrollbar", background=c["line"], troughcolor=c["canvas"], borderwidth=0, arrowsize=12)
+
+    def _build_header(self):
+        """Build the persistent application header."""
+        header = ttk.Frame(self, style="Header.TFrame", padding=(28, 15))
+        header.pack(fill=tk.X)
+        ttk.Label(header, text="SALARY ATLAS", style="HeaderBrand.TLabel").pack(side=tk.LEFT)
+        ttk.Label(header, text="Explore data science pay, one market at a time", style="HeaderText.TLabel").pack(side=tk.LEFT, padx=(16, 0))
 
     def _clear_container(self):
         """Clear all widgets from the main container frame."""
@@ -79,27 +130,41 @@ class SalaryApp(tk.Tk):
 
     def _build_home_view(self):
         """Build the home view with continent selection buttons and refresh control."""
-        top = ttk.Frame(self.home_frame)
-        top.pack(fill=tk.X, pady=(0, 10))
+        top = ttk.Frame(self.home_frame, style="App.TFrame")
+        top.pack(fill=tk.X, pady=(0, 22))
 
         # Title label
-        self.home_title_var = tk.StringVar(value="Choose a Continent")
+        self.home_title_var = tk.StringVar(value="Choose a region")
         ttk.Label(
             top,
             textvariable=self.home_title_var,
-            font=("TkDefaultFont", 14, "bold")
+            style="Title.TLabel"
         ).pack(side=tk.LEFT)
 
         # Refresh button to reload continents
-        ttk.Button(top, text="Refresh", command=self.refresh_continent_buttons).pack(side=tk.RIGHT)
+        ttk.Button(top, text="Refresh data", style="Secondary.TButton", command=self.refresh_continent_buttons).pack(side=tk.RIGHT)
+
+        ttk.Label(self.home_frame, text="Select a region to compare countries, roles, and salary ranges.", style="Subtitle.TLabel").pack(anchor="w", pady=(0, 18))
+
+        remote_card = ttk.Frame(self.home_frame, style="Card.TFrame", padding=(18, 14))
+        remote_card.pack(fill=tk.X, pady=(0, 18))
+        remote_copy = ttk.Frame(remote_card, style="Card.TFrame")
+        remote_copy.pack(side=tk.LEFT, fill=tk.X, expand=True)
+        ttk.Label(remote_copy, text="Remote jobs", style="CardTitle.TLabel").pack(anchor="w")
+        ttk.Label(
+            remote_copy,
+            text="Compare remote opportunities across countries and salary ranges.",
+            style="CardText.TLabel",
+        ).pack(anchor="w", pady=(3, 0))
+        ttk.Button(remote_card, text="Explore remote jobs", style="Accent.TButton", command=self.on_show_remote_jobs).pack(side=tk.RIGHT, padx=(18, 0))
 
         # Container for continent buttons
-        self.home_buttons_frame = ttk.Frame(self.home_frame)
+        self.home_buttons_frame = ttk.Frame(self.home_frame, style="App.TFrame")
         self.home_buttons_frame.pack(fill=tk.BOTH, expand=True)
 
         # Status label showing count of loaded continents
         self.home_status_var = tk.StringVar(value="")
-        ttk.Label(self.home_frame, textvariable=self.home_status_var).pack(anchor="w", pady=(8, 0))
+        ttk.Label(self.home_frame, textvariable=self.home_status_var, style="Subtitle.TLabel").pack(anchor="w", pady=(16, 0))
 
     def show_home(self):
         """Display the home view with continent selection."""
@@ -141,22 +206,22 @@ class SalaryApp(tk.Tk):
     def _build_data_view(self):
         """Build the data view with table, pie chart, and salary statistics."""
         # Top bar with title and back button
-        top = ttk.Frame(self.data_frame)
+        top = ttk.Frame(self.data_frame, style="App.TFrame")
         top.pack(fill=tk.X, pady=(0, 10))
     
         self.data_title_var = tk.StringVar(value="Results")
-        ttk.Label(top, textvariable=self.data_title_var, font=("TkDefaultFont", 12, "bold")).pack(side=tk.LEFT)
-        ttk.Button(top, text="Back", command=self.back_from_data).pack(side=tk.RIGHT)
+        ttk.Label(top, textvariable=self.data_title_var, style="PageTitle.TLabel").pack(side=tk.LEFT)
+        ttk.Button(top, text="← Back", style="Secondary.TButton", command=self.back_from_data).pack(side=tk.RIGHT)
     
         # Main content: table on left (3/4 width), pie chart on right (1/4 width)
-        content = ttk.Frame(self.data_frame)
+        content = ttk.Frame(self.data_frame, style="App.TFrame")
         content.pack(fill=tk.BOTH, expand=True, pady=(0, 10))
         content.rowconfigure(0, weight=1)
         content.columnconfigure(0, weight=3)
         content.columnconfigure(1, weight=2)
     
         # Left side: scrollable table with data
-        table_wrap = ttk.Frame(content)
+        table_wrap = ttk.Frame(content, style="Card.TFrame", padding=1)
         table_wrap.grid(row=0, column=0, sticky="nsew", padx=(0, 8))
         table_wrap.rowconfigure(0, weight=1)
         table_wrap.columnconfigure(0, weight=1)
@@ -170,11 +235,11 @@ class SalaryApp(tk.Tk):
         xscroll.grid(row=1, column=0, sticky="ew")
     
         # Right side: pie chart container
-        self.pie_host = ttk.Frame(content)
+        self.pie_host = ttk.Frame(content, style="Card.TFrame", padding=10)
         self.pie_host.grid(row=0, column=1, sticky="nsew")
         
         # Bottom: salary statistics summary panel
-        self.stats_frame = ttk.LabelFrame(self.data_frame, text="Salary Summary", padding=10)
+        self.stats_frame = ttk.LabelFrame(self.data_frame, text="Salary summary", style="Card.TLabelframe", padding=16)
         self.stats_frame.pack(fill=tk.X, padx=0, pady=(0, 0))
 
     def refresh_continent_buttons(self):
@@ -193,7 +258,7 @@ class SalaryApp(tk.Tk):
 
         # Handle empty result
         if not continents:
-            ttk.Label(self.home_buttons_frame, text="No continents found").pack(anchor="w", pady=6)
+            ttk.Label(self.home_buttons_frame, text="No regions found in the current database.", style="Subtitle.TLabel").pack(anchor="w", pady=6)
             self.home_status_var.set("No continents loaded")
             return
 
@@ -207,44 +272,44 @@ class SalaryApp(tk.Tk):
                 self.home_buttons_frame,
                 text=continent,
                 command=lambda c=continent: self.show_continent_page(c),
-                width=22,
+                style="Continent.TButton",
             )
-            b.grid(row=row, column=col, padx=6, pady=6, sticky="ew")
+            b.grid(row=row, column=col, padx=5, pady=5, sticky="ew")
 
         for col in range(cols):
             self.home_buttons_frame.grid_columnconfigure(col, weight=1)
 
-        self.home_status_var.set(f"Loaded {len(continents)} continents")
+        self.home_status_var.set(f"{len(continents)} regions available")
 
     def _build_continent_view(self):
         """Build the continent view with country selection and action buttons."""
         # Top bar with continent title and back button
-        top = ttk.Frame(self.continent_frame)
+        top = ttk.Frame(self.continent_frame, style="App.TFrame")
         top.pack(fill=tk.X, pady=(0, 10))
 
         self.continent_title_var = tk.StringVar(value="Continent")
         ttk.Label(
             top,
             textvariable=self.continent_title_var,
-            font=("TkDefaultFont", 13, "bold")
+            style="PageTitle.TLabel"
         ).pack(side=tk.LEFT)
 
-        ttk.Button(top, text="Back", command=self.show_home).pack(side=tk.RIGHT)
+        ttk.Button(top, text="← All regions", style="Secondary.TButton", command=self.show_home).pack(side=tk.RIGHT)
 
         # Action card with buttons and country selection
-        card = ttk.Frame(self.continent_frame, padding=10)
+        card = ttk.Frame(self.continent_frame, style="Card.TFrame", padding=22)
         card.pack(fill=tk.X, pady=(0, 8))
 
-        ttk.Label(card, text="Actions", font=("TkDefaultFont", 11, "bold")).grid(
+        ttk.Label(card, text="Explore this region", style="CardTitle.TLabel").grid(
             row=0, column=0, columnspan=3, sticky="w", pady=(0, 8)
         )
 
         # Button: Show overall statistics for the continent
         ttk.Button(
             card,
-            text="Overall (All Countries in this Continent)",
+            text="View country distribution",
             command=self.on_show_overall,
-            width=42
+            style="Accent.TButton",
         ).grid(row=1, column=0, sticky="w", padx=(0, 10))
 
         # Country selection dropdown
@@ -253,21 +318,18 @@ class SalaryApp(tk.Tk):
             card,
             textvariable=self.country_var,
             state="readonly",
-            width=28
+            width=30
         )
         self.country_combo.grid(row=1, column=1, sticky="w", padx=(0, 8))
 
         # Button: Open detailed view for selected country
-        ttk.Button(card, text="Open Country", command=self.on_open_country).grid(
+        ttk.Button(card, text="Open country", style="Secondary.TButton", command=self.on_open_country).grid(
             row=1, column=2, sticky="w"
         )
 
         # Help text explaining the two options
-        info = (
-            "Overall shows job count by country for this continent.\n"
-            "Open Country shows location/title/experience summary for the selected country."
-        )
-        ttk.Label(self.continent_frame, text=info, justify=tk.LEFT).pack(anchor="w", pady=(4, 0))
+        info = "View the regional distribution, or choose a country for a detailed role and experience breakdown."
+        ttk.Label(self.continent_frame, text=info, style="Subtitle.TLabel", justify=tk.LEFT, wraplength=720).pack(anchor="w", pady=(16, 0))
 
     def on_show_overall(self):
         """Load and display overall job count by country for the current continent."""
@@ -284,6 +346,22 @@ class SalaryApp(tk.Tk):
                 pie_df=df,
                 pie_title=f"{self.current_continent}: Country Distribution",
                 stats_df=stats_df
+            )
+        except Exception as ex:
+            messagebox.showerror("Query Error", str(ex))
+
+    def on_show_remote_jobs(self):
+        """Display country distribution and salary statistics for remote jobs."""
+        try:
+            remote_df = count_remote_jobs_by_country(self.conn)
+            salary_df = get_remote_salaries(self.conn)
+            self.current_continent = None
+            self.show_data_page(
+                "Remote jobs",
+                remote_df,
+                pie_df=remote_df,
+                pie_title="Remote jobs by country",
+                stats_df=salary_df,
             )
         except Exception as ex:
             messagebox.showerror("Query Error", str(ex))
@@ -344,7 +422,10 @@ class SalaryApp(tk.Tk):
 
         # Populate rows from dataframe
         for row in df.itertuples(index=False):
-            self.tree.insert("", tk.END, values=list(row))
+            tag = "even" if len(self.tree.get_children()) % 2 == 0 else "odd"
+            self.tree.insert("", tk.END, values=list(row), tags=(tag,))
+        self.tree.tag_configure("even", background="#FFFFFF")
+        self.tree.tag_configure("odd", background=self.colors["table_alt"])
     
     def _render_pie(self, pie_df=None, pie_title=None):
         """Render a pie chart showing job distribution by location."""
@@ -360,6 +441,7 @@ class SalaryApp(tk.Tk):
             ttk.Label(
                 self.pie_host,
                 text="Pie chart is shown for Overall view.",
+                style="CardText.TLabel",
                 justify=tk.CENTER,
             ).pack(expand=True)
             return
@@ -369,6 +451,7 @@ class SalaryApp(tk.Tk):
             ttk.Label(
                 self.pie_host,
                 text="No pie data available for this view.",
+                style="CardText.TLabel",
                 justify=tk.CENTER,
             ).pack(expand=True)
             return
@@ -402,19 +485,19 @@ class SalaryApp(tk.Tk):
             lowest = stats.get("lowest_pay")
             
             # Create three columns for the stats display
-            cols = ttk.Frame(self.stats_frame)
+            cols = ttk.Frame(self.stats_frame, style="Card.TFrame")
             cols.pack(fill=tk.X)
             
             # Average salary column
-            avg_frame = ttk.Frame(cols)
+            avg_frame = ttk.Frame(cols, style="Card.TFrame")
             avg_frame.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 20))
-            ttk.Label(avg_frame, text="Average Salary", font=("TkDefaultFont", 10, "bold")).pack()
-            ttk.Label(avg_frame, text=f"${avg:,.2f}" if avg else "N/A", font=("TkDefaultFont", 11)).pack()
+            ttk.Label(avg_frame, text="AVERAGE SALARY", style="CardText.TLabel").pack(anchor="w")
+            ttk.Label(avg_frame, text=f"${avg:,.0f}" if avg else "N/A", style="CardTitle.TLabel", font=("Helvetica", 18, "bold")).pack(anchor="w", pady=(4, 0))
             
             # Highest salary column with job context
-            high_frame = ttk.Frame(cols)
+            high_frame = ttk.Frame(cols, style="Card.TFrame")
             high_frame.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 20))
-            ttk.Label(high_frame, text="Highest Salary", font=("TkDefaultFont", 10, "bold")).pack()
+            ttk.Label(high_frame, text="HIGHEST SALARY", style="CardText.TLabel").pack(anchor="w")
             if highest:
                 salary = highest.get("salary", "N/A")
                 title = highest.get("job_title", "")
@@ -423,15 +506,15 @@ class SalaryApp(tk.Tk):
                 context = highest.get("country") or highest.get("location", "")
                 detail_parts = [p for p in [context, title, exp] if p]
                 detail = " | ".join(detail_parts)
-                ttk.Label(high_frame, text=f"${salary:,.2f}" if salary else "N/A").pack()
-                ttk.Label(high_frame, text=detail, font=("TkDefaultFont", 9), justify=tk.LEFT, wraplength=200).pack()
+                ttk.Label(high_frame, text=f"${salary:,.0f}" if salary else "N/A", style="CardTitle.TLabel", font=("Helvetica", 18, "bold")).pack(anchor="w", pady=(4, 0))
+                ttk.Label(high_frame, text=detail, style="CardText.TLabel", justify=tk.LEFT, wraplength=240).pack(anchor="w", pady=(3, 0))
             else:
                 ttk.Label(high_frame, text="N/A").pack()
             
             # Lowest salary column with job context
-            low_frame = ttk.Frame(cols)
+            low_frame = ttk.Frame(cols, style="Card.TFrame")
             low_frame.pack(side=tk.LEFT, fill=tk.X, expand=True)
-            ttk.Label(low_frame, text="Lowest Salary", font=("TkDefaultFont", 10, "bold")).pack()
+            ttk.Label(low_frame, text="LOWEST SALARY", style="CardText.TLabel").pack(anchor="w")
             if lowest:
                 salary = lowest.get("salary", "N/A")
                 title = lowest.get("job_title", "")
@@ -440,8 +523,8 @@ class SalaryApp(tk.Tk):
                 context = lowest.get("country") or lowest.get("location", "")
                 detail_parts = [p for p in [context, title, exp] if p]
                 detail = " | ".join(detail_parts)
-                ttk.Label(low_frame, text=f"${salary:,.2f}" if salary else "N/A").pack()
-                ttk.Label(low_frame, text=detail, font=("TkDefaultFont", 9), justify=tk.LEFT, wraplength=200).pack()
+                ttk.Label(low_frame, text=f"${salary:,.0f}" if salary else "N/A", style="CardTitle.TLabel", font=("Helvetica", 18, "bold")).pack(anchor="w", pady=(4, 0))
+                ttk.Label(low_frame, text=detail, style="CardText.TLabel", justify=tk.LEFT, wraplength=240).pack(anchor="w", pady=(3, 0))
             else:
                 ttk.Label(low_frame, text="N/A").pack()
         except Exception as ex:

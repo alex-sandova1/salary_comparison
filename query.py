@@ -135,3 +135,15 @@ def get_salaries_by_country(conn, country):
     """Query individual salary records for all jobs in a country."""
     sql_template = get_query_by_label("queries.sql", "get salary by country")
     return pd.read_sql_query(sql_template, conn, params=[country])
+
+
+def count_remote_jobs_by_country(conn):
+    """Return job counts by country for records marked as remote."""
+    sql_template = get_query_by_label("queries.sql", "remote jobs by country")
+    return pd.read_sql_query(sql_template, conn)
+
+
+def get_remote_salaries(conn):
+    """Return remote job records with salaries for the summary cards."""
+    sql_template = get_query_by_label("queries.sql", "get remote salaries")
+    return pd.read_sql_query(sql_template, conn)

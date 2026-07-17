@@ -30,7 +30,7 @@
 37,Data scientist,Full Time,Senior,Ontario,USD,68000,Canada,North America
 38,Data scientist,Full Time,Senior,Brooklyn,USD,104000,United States,North America
 40,Data scientist,Full Time,Mid,Sydney,USD,62000,Australia,Australia
-41,Data scientist,Full Time,Senior,Remote- US,USD,150000,United States,North America
+41,Data scientist,Full Time,Senior,Remote,USD,150000,United States,North America
 42,Data scientist,Full Time,Senior,Cambridge,USD,68000,United Kingdom,Europe
 44,Data scientist,Full Time,Mid,La Libertad,USD,40000,Peru,South America
 45,Data scientist,Full Time,Senior,San Francisco,USD,161000,United States,North America
@@ -57,7 +57,7 @@
 75,Data scientist,Full Time,Mid,Brampton,USD,40000,Canada,North America
 78,Data scientist,Full Time,Senior,Salt Lake City,USD,68000,United States,North America
 79,Data scientist,Full Time,Mid,Munich,USD,40000, Germany,Europe
-80,Data scientist,Full Time,Mid,Oslo,USD,40000, Norway,Europe
+80,Data scientist,Full Time,Mid,Oslo,USD,40000,Norway,Europe
 81,Data scientist,Full Time,Senior,Basel,USD,68000,Switzerland,Europe
 82,Data scientist,Full Time,Mid,Düsseldorf,USD,40000,Germany,Europe
 83,Data scientist,Full Time,Entry,Paris,USD,36000,France,Europe
@@ -519,7 +519,7 @@
 709,Data analyst,Full Time,Entry,High Wycombe,USD,30000,United Kingdom,Europe
 711,Data analyst,Full Time,Senior,Singapore,USD,63000,Singapore,Asia
 712,Data analyst,Full Time,Mid,Paris,USD,51000, France,Europe
-713,Data analyst,Full Time,Mid,Remote,USD,51000, United Kingdom,Europe
+713,Data analyst,Full Time,Mid,Remote,USD,51000,United Kingdom,Europe
 714,Data analyst,Full Time,Senior,Berlin,USD,94000, Germany,Europe
 715,Data analyst,Full Time,Entry,Lyon,USD,30000, France,Europe
 717,Data analyst,Full Time,Entry,Heredia,USD,30000,Costa Rica,North America
